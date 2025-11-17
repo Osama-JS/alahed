@@ -1,0 +1,1 @@
+https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js

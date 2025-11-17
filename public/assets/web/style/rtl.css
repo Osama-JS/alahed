@@ -1,0 +1,9 @@
+/* .head-section {
+  direction: ltr;
+} */
+.section-banner {
+  transform: scaleX(-1);
+}
+.header-wrap .header-nav {
+  direction: rtl;
+}
