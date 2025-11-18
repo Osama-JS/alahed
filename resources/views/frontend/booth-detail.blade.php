@@ -6,6 +6,7 @@
 @php
     $locale = app()->getLocale();
     $description = $locale == 'ar' ? $booth->description_ar : $booth->description_en;
+    $pricePerSqm = ($booth->area && $booth->area > 0) ? round($booth->price / $booth->area, 2) : null;
 @endphp
 
 <!-- Booth Detail Section -->
@@ -19,9 +20,9 @@
                 </div>
                 @endif
 
-                <h1 class="mb-3">{{ $booth->name }}</h1>
+                <h1 class="booth-title mb-2">{{ $booth->name }}</h1>
 
-                <div class="booth-meta mb-4">
+                <div class="booth-meta mb-3">
                     <span class="badge me-2">
                         @if($booth->type == 'standard')
                             <span class="badge bg-secondary">{{ $locale == 'ar' ? 'عادي' : 'Standard' }}</span>
@@ -39,11 +40,34 @@
                     </span>
 
                     @if($booth->status == 'available')
-                        <span class="badge bg-success">{{ $locale == 'ar' ? 'متاح' : 'Available' }}</span>
+                        <span class="badge bg-success booth-status-pill">{{ $locale == 'ar' ? 'متاح للحجز' : 'Available for booking' }}</span>
                     @else
-                        <span class="badge bg-danger">{{ $locale == 'ar' ? 'محجوز' : 'Reserved' }}</span>
+                        <span class="badge bg-danger booth-status-pill">{{ $locale == 'ar' ? 'محجوز' : 'Reserved' }}</span>
                     @endif
                 </div>
+
+                @if($booth->area || ($booth->width && $booth->height) || $pricePerSqm)
+                <div class="booth-key-facts mb-4">
+                    @if($booth->area)
+                        <div class="fact-item">
+                            <div class="fact-label">{{ $locale == 'ar' ? 'المساحة الكلية' : 'Total Area' }}</div>
+                            <div class="fact-value">{{ $booth->area }} {{ $locale == 'ar' ? 'م²' : 'm²' }}</div>
+                        </div>
+                    @endif
+                    @if($booth->width && $booth->height)
+                        <div class="fact-item">
+                            <div class="fact-label">{{ $locale == 'ar' ? 'الأبعاد' : 'Dimensions' }}</div>
+                            <div class="fact-value">{{ $booth->width }} × {{ $booth->height }} {{ $locale == 'ar' ? 'متر' : 'm' }}</div>
+                        </div>
+                    @endif
+                    @if($pricePerSqm)
+                        <div class="fact-item">
+                            <div class="fact-label">{{ $locale == 'ar' ? 'السعر / م²' : 'Price / m²' }}</div>
+                            <div class="fact-value">{{ number_format($pricePerSqm, 2) }} {{ $booth->currency }}</div>
+                        </div>
+                    @endif
+                </div>
+                @endif
 
                 @if($description)
                 <div class="booth-description mb-4">
@@ -97,13 +121,61 @@
                         </div>
 
                         @if($booth->status == 'available')
-                        <a href="{{ route('registration') }}" class="btn btn-primary btn-lg w-100">
-                            {{ $locale == 'ar' ? 'احجز الآن' : 'Book Now' }}
-                        </a>
+                            <hr>
+                            <h5 class="mb-3">{{ $locale == 'ar' ? 'طلب حجز هذا البوث' : 'Request to Book this Booth' }}</h5>
+
+                            @if(session('success'))
+                                <div class="alert alert-success">{{ session('success') }}</div>
+                            @endif
+
+                            @if($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('booths.book', $booth) }}" class="booth-booking-form">
+                                @csrf
+                                <div class="mb-2">
+                                    <label class="form-label">{{ $locale == 'ar' ? 'الاسم الكامل' : 'Full Name' }}</label>
+                                    <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">{{ $locale == 'ar' ? 'البريد الإلكتروني' : 'Email' }}</label>
+                                    <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">{{ $locale == 'ar' ? 'رقم الجوال' : 'Phone' }}</label>
+                                    <input type="text" name="phone" class="form-control" value="{{ old('phone') }}">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">{{ $locale == 'ar' ? 'اسم الجهة / الشركة' : 'Company / Organization' }}</label>
+                                    <input type="text" name="company" class="form-control" value="{{ old('company') }}">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">{{ $locale == 'ar' ? 'الموقع الإلكتروني' : 'Website' }}</label>
+                                    <input type="text" name="website" class="form-control" value="{{ old('website') }}">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">{{ $locale == 'ar' ? 'نوع النشاط التجاري' : 'Business Type' }}</label>
+                                    <input type="text" name="business_type" class="form-control" value="{{ old('business_type') }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">{{ $locale == 'ar' ? 'ملاحظات إضافية' : 'Additional Notes' }}</label>
+                                    <textarea name="notes" rows="3" class="form-control">{{ old('notes') }}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    {{ $locale == 'ar' ? 'إرسال طلب الحجز' : 'Submit Booking Request' }}
+                                </button>
+                            </form>
                         @else
-                        <button class="btn btn-secondary btn-lg w-100" disabled>
-                            {{ $locale == 'ar' ? 'محجوز' : 'Reserved' }}
-                        </button>
+                            <button class="btn btn-secondary btn-lg w-100" disabled>
+                                {{ $locale == 'ar' ? 'محجوز' : 'Reserved' }}
+                            </button>
                         @endif
 
                         <div class="mt-3">
@@ -123,6 +195,21 @@
     padding: 60px 0;
 }
 
+.booth-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.booth-meta .badge {
+    font-size: 0.8rem;
+}
+
+.booth-status-pill {
+    border-radius: 999px;
+    padding-inline: 10px;
+}
+
 .booth-image img {
     width: 100%;
     height: auto;
@@ -132,6 +219,32 @@
 
 .booth-info-card {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.booth-key-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.booth-key-facts .fact-item {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.booth-key-facts .fact-label {
+    font-size: 0.78rem;
+    color: #6b7280;
+    margin-bottom: 2px;
+}
+
+.booth-key-facts .fact-value {
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: #111827;
 }
 
 .info-item strong {

@@ -33,8 +33,7 @@
             <div class="row">
                 @foreach($exhibitors as $exhibitor)
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                        <a href="{{ route('exhibitors.show', $exhibitor) }}" class="text-decoration-none">
-                        <div class="exhibitor-card biban-card">
+                        <div class="exhibitor-card">
                             <div class="exhibitor-logo biban-card-img">
                                 @if($exhibitor->logo)
                                     <img src="{{ asset('storage/' . $exhibitor->logo) }}" alt="{{ app()->getLocale() == 'ar' ? $exhibitor->name_ar : $exhibitor->name_en }}" />
@@ -42,24 +41,25 @@
                                     <img src="{{ asset('assets/web/images/default-exhibitor.png') }}" alt="{{ app()->getLocale() == 'ar' ? $exhibitor->name_ar : $exhibitor->name_en }}" />
                                 @endif
                             </div>
-                            <div class="exhibitor-content biban-card-body">
+                            <div class="exhibitor-content">
                                 <h4>{{ app()->getLocale() == 'ar' ? $exhibitor->name_ar : $exhibitor->name_en }}</h4>
                                 @php
                                     $summary = app()->getLocale() == 'ar' ? ($exhibitor->summary_ar ?? '') : ($exhibitor->summary_en ?? '');
                                 @endphp
                                 @if($summary)
                                     <p class="exhibitor-description">
-                                        {{ Str::limit($summary, 100) }}
+                                        {{ $summary }}
                                     </p>
                                 @elseif($exhibitor->description_ar || $exhibitor->description_en)
                                     <p class="exhibitor-description">
                                         {!! Str::limit(app()->getLocale() == 'ar' ? $exhibitor->description_ar : $exhibitor->description_en, 100) !!}
                                     </p>
                                 @endif
-                                @if($exhibitor->booth_number)
+                                @if($exhibitor->booth)
                                     <div class="booth-number">
                                         <i class="fas fa-map-marker-alt"></i>
-                                        {{ app()->getLocale() == 'ar' ? 'جناح رقم' : 'Booth' }} <strong>{{ $exhibitor->booth_number }}</strong>
+                                        {{ app()->getLocale() == 'ar' ? 'البوث:' : 'Booth:' }}
+                                        <strong>{{ $exhibitor->booth->name }}</strong>
                                     </div>
                                 @endif
                                 @if($exhibitor->website)
@@ -68,9 +68,14 @@
                                         {{ app()->getLocale() == 'ar' ? 'زيارة الموقع' : 'Visit Website' }}
                                     </a>
                                 @endif
+
+                                <div class="mt-3 d-flex justify-content-end">
+                                    <a href="{{ route('exhibitors.show', $exhibitor) }}" class="exhibitor-details-btn" aria-label="{{ app()->getLocale() == 'ar' ? 'عرض تفاصيل العارض' : 'View exhibitor details' }}">
+                                        <i class="fas {{ app()->getLocale() == 'ar' ? 'fa-arrow-left' : 'fa-arrow-right' }}"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        </a>
                     </div>
                 @endforeach
             </div>
@@ -86,36 +91,23 @@
 
 @push('styles')
 <style>
-    /* Biban-style exhibitor cards (consistent with speakers) */
+    /* Exhibitor cards: clean white design */
     .exhibitor-card {
         position: relative;
         border-radius: 24px;
         overflow: hidden;
-        background:
-            radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 60%),
-            radial-gradient(circle at bottom right, rgba(96, 165, 250, 0.20), transparent 60%),
-            #0F4572;
-        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35);
+        background: #ffffff;
+        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.10);
         transition: transform 0.25s ease, box-shadow 0.25s ease;
         height: 100%;
         display: flex;
         flex-direction: column;
+        border: 1px solid #e5e7eb;
     }
-    
-    .exhibitor-card::before {
-        content: "";
-        position: absolute;
-        inset-inline-start: -40px;
-        top: -40px;
-        width: 120px;
-        height: 120px;
-        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.16), transparent 60%);
-        pointer-events: none;
-    }
-    
+
     .exhibitor-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 26px 65px rgba(15, 23, 42, 0.55);
+        transform: translateY(-6px);
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
     }
     
     .exhibitor-logo {
@@ -139,20 +131,20 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        background: linear-gradient(180deg, rgba(15, 69, 114, 0.05), rgba(15, 69, 114, 0.6));
-        color: #E5E7EB;
+        background: #ffffff;
+        color: #111827;
     }
     
     .exhibitor-content h4 {
         font-size: 18px;
-        color: #F9FAFB;
+        color: #111827;
         margin-bottom: 6px;
         font-weight: 700;
     }
     
     .exhibitor-description {
         font-size: 14px;
-        color: #E5E7EB;
+        color: #4B5563;
         line-height: 1.6;
         margin-bottom: 10px;
         flex: 1;
@@ -160,16 +152,39 @@
     
     .booth-number {
         font-size: 14px;
-        color: #BFDBFE;
+        color: #1D4ED8;
         margin-bottom: 10px;
     }
     
     .booth-number i {
         margin-right: 5px;
+        color: #2563EB;
     }
     
     .booth-number strong {
         font-weight: 700;
+    }
+
+    .exhibitor-details-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 1px solid #e5e7eb;
+        background: #0F4572;
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.20);
+    }
+
+    .exhibitor-details-btn:hover {
+        background: #006F93;
+        color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 12px 26px rgba(15, 23, 42, 0.30);
     }
 </style>
 @endpush

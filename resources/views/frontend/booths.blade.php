@@ -73,7 +73,18 @@
             </p>
         </div>
 
-        <div class="d-flex justify-content-end mb-3 booths-view-toggle">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+            <form method="GET" action="{{ route('booths') }}" class="d-flex align-items-center gap-2">
+                <label class="form-label mb-0 small">{{ $locale == 'ar' ? 'فلترة حسب الحالة:' : 'Filter by status:' }}</label>
+                @php $currentStatus = request('status'); @endphp
+                <select name="status" class="form-select form-select-sm" style="min-width: 180px;" onchange="this.form.submit()">
+                    <option value="">{{ $locale == 'ar' ? 'الكل (متاح + محجوز)' : 'All (Available + Reserved)' }}</option>
+                    <option value="available" {{ $currentStatus === 'available' ? 'selected' : '' }}>{{ $locale == 'ar' ? 'متاح فقط' : 'Available only' }}</option>
+                    <option value="reserved" {{ $currentStatus === 'reserved' ? 'selected' : '' }}>{{ $locale == 'ar' ? 'محجوز فقط' : 'Reserved only' }}</option>
+                </select>
+            </form>
+
+            <div class="booths-view-toggle">
             <div class="btn-group" role="group" aria-label="Booths view toggle">
                 <button type="button" class="btn btn-sm btn-primary active" data-view="cards">
                     {{ $locale == 'ar' ? 'عرض كبطاقات' : 'Card View' }}
@@ -81,6 +92,7 @@
                 <button type="button" class="btn btn-sm btn-outline-primary" data-view="table">
                     {{ $locale == 'ar' ? 'عرض كجدول' : 'Table View' }}
                 </button>
+            </div>
             </div>
         </div>
 
@@ -158,8 +170,8 @@
                                         </div>
                                         <div class="actions">
                                             @if($booth->isAvailable())
-                                                <a href="{{ route('registration') }}" class="btn btn-sm btn-primary">
-                                                    {{ $locale == 'ar' ? 'طلب حجز' : 'Request Booking' }}
+                                                <a href="{{ route('booths.show', $booth) }}" class="btn btn-sm btn-primary">
+                                                    {{ $locale == 'ar' ? 'طلب حجز هذا البوث' : 'Request this Booth' }}
                                                 </a>
                                             @else
                                                 <button class="btn btn-sm btn-secondary" disabled>
@@ -167,7 +179,7 @@
                                                 </button>
                                             @endif
                                             <a href="{{ route('booths.show', $booth) }}" class="btn btn-sm btn-link">
-                                                {{ $locale == 'ar' ? 'تفاصيل' : 'Details' }}
+                                                {{ $locale == 'ar' ? 'تفاصيل أكثر' : 'More Details' }}
                                             </a>
                                         </div>
                                     </div>
@@ -249,12 +261,16 @@
                                     </div>
                                     <div class="bt-col bt-col-actions">
                                         @if($booth->isAvailable())
-                                            <a href="{{ route('registration') }}" class="btn btn-sm btn-outline-primary w-100 mb-1">
-                                                {{ $locale == 'ar' ? 'طلب حجز' : 'Request Booking' }}
+                                            <a href="{{ route('booths.show', $booth) }}" class="btn btn-sm btn-outline-primary w-100 mb-1">
+                                                {{ $locale == 'ar' ? 'طلب حجز هذا البوث' : 'Request this Booth' }}
                                             </a>
+                                        @else
+                                            <button class="btn btn-sm btn-secondary w-100 mb-1" disabled>
+                                                {{ $locale == 'ar' ? 'غير متاح' : 'Not Available' }}
+                                            </button>
                                         @endif
                                         <a href="{{ route('booths.show', $booth) }}" class="btn btn-sm btn-link w-100 p-0">
-                                            {{ $locale == 'ar' ? 'تفاصيل' : 'Details' }}
+                                            {{ $locale == 'ar' ? 'تفاصيل أكثر' : 'More Details' }}
                                         </a>
                                     </div>
                                 </div>

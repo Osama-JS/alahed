@@ -345,7 +345,7 @@
     @stack('styles')
 </head>
 
-<body class="{{ request()->routeIs('home') ? 'home-page' : '' }}">
+<body class="{{ request()->routeIs('home') ? 'home-page' : '' }}" style="background-color: #f2f6f9;">
     <!-- Header -->
     @include('frontend.partials.header')
 

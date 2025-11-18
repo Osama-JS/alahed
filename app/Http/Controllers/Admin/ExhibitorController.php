@@ -12,7 +12,7 @@ class ExhibitorController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Exhibitor::with('conference');
+        $query = Exhibitor::with(['conference', 'booth']);
 
         // Filter by conference
         if ($request->filled('conference_id')) {

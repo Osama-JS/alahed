@@ -158,12 +158,17 @@
         <div class="container">
             <div class="section-title-wrap">
                 <h2 class="section-title">{{ app()->getLocale() == 'ar' ? 'المتحدثون' : 'Speakers' }}</h2>
+                <p class="section-subtitle">
+                    {{ app()->getLocale() == 'ar'
+                        ? 'اكتشف نخبة المتحدثين والخبراء المشاركين في المؤتمر وتجاربهم الملهمة.'
+                        : 'Discover the distinguished speakers and experts sharing their inspiring experiences at the conference.' }}
+                </p>
             </div>
 
             <div class="speakers-wrap">
                 <div class="speakers-section-wrap">
                     <div class="swiper speakers-swiper">
-                        <div class="swiper-wrapper">
+                        <div class="swiper-wrapper ">
                         @foreach ($speakers as $speaker)
                             <div class="swiper-slide">
                                 <div class="speakers-item">
@@ -230,6 +235,11 @@
         <div class="container">
             <div class="section-title-wrap">
                 <h2 class="section-title">{{ app()->getLocale() == 'ar' ? 'جدول المؤتمر' : 'Conference Agenda' }}</h2>
+                <p class="section-subtitle">
+                    {{ app()->getLocale() == 'ar'
+                        ? 'تعرّف على تفاصيل أيام المؤتمر وجلساته وأهم المحاور المطروحة.'
+                        : 'Explore the detailed schedule of conference days, sessions, and key discussion topics.' }}
+                </p>
             </div>
         </div>
         <div class="container">
@@ -267,10 +277,10 @@
                                             </li>
 
                                             @endforeach
-                                 
+                                      
                                            
                                             <li>
-                                                <a class="site-filled-btn white" href="ar/agenda/2025-11-05.html">
+                                                <a class="site-filled-btn white" href="{{ route('agenda.show', $day) }}">
                                                     {{ app()->getLocale() == 'ar' ? 'عرض الكل' : 'View All' }}
                                                 </a>
                                             </li>
@@ -309,6 +319,11 @@
         <div class="container">
             <div class="section-title-wrap">
                 <h2 class="section-title">{{ app()->getLocale() == 'ar' ? 'العارضون' : 'Exhibitors' }}</h2>
+                <p class="section-subtitle">
+                    {{ app()->getLocale() == 'ar'
+                        ? 'تعرّف على الجهات المشاركة وحلولهم ومنتجاتهم المعروضة في المعرض.'
+                        : 'Get to know the participating organizations and the solutions and products they showcase.' }}
+                </p>
             </div>
 
             <div class="">
@@ -333,17 +348,17 @@
                                         <div class="tag-item industry">{{ app()->getLocale() == 'ar' ? $exhibitor->summary_ar : $exhibitor->summary_en }}</div>
                                     </div>
                                     <div class="news-card-body">
-                                        <p class="brief-ellipsis">
+                                        <p>
                                            {!!  Str::limit(app()->getLocale() == 'ar' ? $exhibitor->description_ar : $exhibitor->description_en, 90) !!}
                                         </p>
                                     </div>
                                     <div class="news-card-foot justify-content-end">
-                                        <a href="ar/exhibitor/164025.html"
+                                        <a href="{{ route('exhibitors.show', $exhibitor) }}"
                                             class="more-btn-filled custom-swiper-btn "><img
                                                 src="assets/web/images/next-arrow.png" /></a>
                                     </div>
                                 </div>
-                                <a href="ar/exhibitor/164025.html" class="stretched-link"
+                                <a href="{{ route('exhibitors.show', $exhibitor) }}" class="stretched-link"
                                     style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;"
                                     tabindex="-1" aria-label="{{ app()->getLocale() == 'ar' ? $exhibitor->name_ar : $exhibitor->name_en }}"></a>
                             </div>
@@ -378,51 +393,74 @@
     <!-- Sponsors Section -->
     @if ($sponsors->count() > 0)
         <section class="sponsors-contain section-contain bg-white">
-            <img class="sponsors-shape" src="{{ asset('assets/web/images/sponsors-shape.png') }}" />
             <div class="container">
                 <div class="section-title-wrap">
-                    <h2 class="section-title gray-color">{{ app()->getLocale() == 'ar' ? 'الرعاة' : 'Sponsors' }}</h2>
+                    <h2 class="section-title ">{{ app()->getLocale() == 'ar' ? 'الرعاة' : 'Sponsors' }}</h2>
+                    <p class="section-subtitle">
+                        {{ app()->getLocale() == 'ar'
+                            ? 'نقدّر دعم شركائنا ورعاتنا الذين يسهمون في نجاح هذا الحدث.'
+                            : 'We value the support of our partners and sponsors who contribute to the success of this event.' }}
+                    </p>
                 </div>
-                <div class="sponsors-wrap">
-                    @php
-                        $sponsorTypes = $sponsors->groupBy('type');
-                    @endphp
+
+                @php
+                    $sponsorTypes = $sponsors->groupBy('type');
+                    $typeLabelsAr = [
+                        'platinum' => 'الرعاة البلاتينيون',
+                        'gold' => 'الرعاة الذهبيون',
+                        'silver' => 'الرعاة الفضيون',
+                        'bronze' => 'الرعاة البرونزيون',
+                        'partner' => 'الشركاء',
+                    ];
+                    $typeLabelsEn = [
+                        'platinum' => 'Platinum',
+                        'gold' => 'Gold',
+                        'silver' => 'Silver',
+                        'bronze' => 'Bronze',
+                        'partner' => 'Partners',
+                    ];
+                @endphp
+
+                <div class="sponsors-filter-wrap mb-4">
+                    <button type="button" class="sponsor-filter-btn active" data-sponsor-filter="all">
+                        {{ app()->getLocale() == 'ar' ? 'جميع الرعاة' : 'All Sponsors' }}
+                    </button>
                     @foreach (['platinum', 'gold', 'silver', 'bronze', 'partner'] as $type)
                         @if (isset($sponsorTypes[$type]) && $sponsorTypes[$type]->count() > 0)
-                            <div class="sponsor-category mb-5">
-                                <h3 class="sponsor-type-title">
-                                    {{ app()->getLocale() == 'ar'
-                                        ? [
-                                            'platinum' => 'الرعاة البلاتينيون',
-                                            'gold' => 'الرعاة الذهبيون',
-                                            'silver' => 'الرعاة الفضيون',
-                                            'bronze' => 'الرعاة البرونزيون',
-                                            'partner' => 'الشركاء',
-                                        ][$type]
-                                        : [
-                                            'platinum' => 'Platinum Sponsors',
-                                            'gold' => 'Gold Sponsors',
-                                            'silver' => 'Silver Sponsors',
-                                            'bronze' => 'Bronze Sponsors',
-                                            'partner' => 'Partners',
-                                        ][$type] }}
-                                </h3>
-                                <div class="row">
-                                    @foreach ($sponsorTypes[$type] as $sponsor)
-                                        <div class="col-md-3 col-6 mb-4">
-                                            <div class="sponsor-item">
-                                                @if ($sponsor->logo)
-                                                    <img src="{{ asset('storage/' . $sponsor->logo) }}"
-                                                        alt="{{ app()->getLocale() == 'ar' ? $sponsor->name_ar : $sponsor->name_en }}"
-                                                        class="img-fluid" />
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
+                            <button type="button" class="sponsor-filter-btn" data-sponsor-filter="{{ $type }}">
+                                {{ app()->getLocale() == 'ar' ? $typeLabelsAr[$type] : $typeLabelsEn[$type] }}
+                            </button>
                         @endif
                     @endforeach
+                </div>
+
+                <div class="sponsors-strip-wrap">
+                    <div class="swiper sponsors-swiper">
+                        <div class="swiper-wrapper py-3">
+                            @foreach ($sponsors as $sponsor)
+                                @if ($sponsor->logo)
+                                    <div class="swiper-slide" data-sponsor-type="{{ $sponsor->type }}">
+                                        <div class="sponsor-logo-card">
+                                            <div class="sponsor-logo-inner">
+                                                <img src="{{ asset('storage/' . $sponsor->logo) }}"
+                                                    alt="{{ app()->getLocale() == 'ar' ? $sponsor->name_ar : $sponsor->name_en }}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                @endif
+                            @endforeach
+                        </div>
+
+                        <div class="sponsors-strip-nav">
+                            <div class="custom-swiper-btn custom-swiper-prev sponsors-prev" style="background: #0D121C33 !important;">
+                                <img src="{{ asset('assets/web/images/prev-arrow.png') }}" />
+                            </div>
+                            <div class="custom-swiper-btn custom-swiper-next sponsors-next" style="background: #0D121C33 !important;">
+                                <img src="{{ asset('assets/web/images/next-arrow.png') }}" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -436,7 +474,11 @@
             <div class="container">
                 <div class="section-title-wrap">
                     <h2 class="section-title">{{ app()->getLocale() == 'ar' ? 'الأسئلة الشائعة' : 'FAQs' }}</h2>
-                    <img class="section-banner" src="{{ asset('assets/web/images/section-title-banner.png') }}" />
+                    <p class="section-subtitle">
+                        {{ app()->getLocale() == 'ar'
+                            ? 'إجابات على أكثر الأسئلة تكرارًا حول المؤتمر، التسجيل والمشاركة.'
+                            : 'Answers to the most common questions about the conference, registration, and participation.' }}
+                    </p>
                 </div>
                 <div class="accordion" id="faqAccordion">
                     @foreach ($faqs as $index => $faq)
@@ -508,6 +550,13 @@
             color: rgba(255, 255, 255, 0.85);
         }
 
+        .section-subtitle {
+            margin-top: 6px;
+            max-width: 640px;
+            font-size: 0.95rem;
+            color: #6b7280;
+        }
+
         /* Modern FAQ styling */
         .faqs-contain .accordion-item {
             border-radius: 18px !important;
@@ -515,12 +564,17 @@
             border: 1px solid rgba(15, 69, 114, 0.08);
             box-shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
             margin-bottom: 16px;
+            background-color: #ffffff !important;
         }
 
         .faqs-contain .accordion-button {
             font-weight: 600;
             font-size: 0.98rem;
             padding: 14px 18px;
+            border: none;
+            box-shadow: none;
+            background-color: #ffffff;
+            border-radius: 0;
         }
 
         .faqs-contain .accordion-button:not(.collapsed) {
@@ -567,6 +621,127 @@
             font-size: 14px;
         }
 
+        /* Sponsors strip */
+        .sponsors-contain {
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .sponsors-filter-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .sponsor-filter-btn {
+            border: none;
+            outline: none;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            background: #f3f4f6;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sponsor-filter-btn.active {
+            background: linear-gradient(135deg, #0f4572, #00aaac);
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+        }
+
+        .sponsors-strip-wrap {
+            position: relative;
+        }
+
+        .sponsor-logo-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 14px;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 1px 7px rgba(15, 23, 42, 0.12);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            height: 96px;
+        }
+
+        .sponsor-logo-inner {
+            width: 100%;
+            max-width: 160px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sponsor-logo-inner img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .sponsors-strip-nav {
+            position: absolute;
+            inset-inline-end: 0;
+            inset-block-start: 0;
+            display: flex;
+            gap: 8px;
+            z-index: 5;
+        }
+
+       
+
+        /* Exhibitors slider cards: make cards consistent */
+        #exhibitors .exhb-swiper .swiper-wrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: stretch;
+        }
+
+        /* Fix slide width so all exhibitor cards are the same and aligned horizontally */
+        #exhibitors .exhb-swiper .swiper-slide {
+            display: flex;
+            height: auto;
+            width: 260px;
+            margin-inline-end: 24px;
+        }
+
+        #exhibitors .news-card.spe-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background-color: #FFFFFFE5 !important;
+        }
+
+        #exhibitors .news-card-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        #exhibitors .exhb-img-wrapper {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #exhibitors .exhb-img-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        #exhibitors .news-card-body {
+            min-height: 80px;
+            flex: 1;
+        }
+
     </style>
 @endpush
 
@@ -603,25 +778,54 @@
             },
         });
 
-        // Initialize Swiper for Exhibitors
-        var exhbSwiper = new Swiper('.exhb-swiper', {
-            slidesPerView: 1,
-            spaceBetween: 20,
+        // Initialize Swiper for Sponsors strip
+        var sponsorsSwiper = new Swiper('.sponsors-swiper', {
+            slidesPerView: 2,
+            spaceBetween: 16,
             navigation: {
-                nextEl: '#exhibitors .custom-swiper-next',
-                prevEl: '#exhibitors .custom-swiper-prev',
+                nextEl: '.sponsors-next',
+                prevEl: '.sponsors-prev',
             },
             breakpoints: {
-                640: {
-                    slidesPerView: 2,
-                },
-                768: {
+                480: {
                     slidesPerView: 3,
                 },
-                1024: {
+                768: {
                     slidesPerView: 4,
                 },
+                1024: {
+                    slidesPerView: 6,
+                },
             },
+        });
+
+        // Sponsors filter behaviour
+        document.addEventListener('DOMContentLoaded', function () {
+            var filterButtons = document.querySelectorAll('.sponsor-filter-btn');
+            var sponsorSlides = document.querySelectorAll('.sponsors-swiper .swiper-slide');
+
+            if (!filterButtons.length || !sponsorSlides.length || !sponsorsSwiper) return;
+
+            filterButtons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var type = this.getAttribute('data-sponsor-filter');
+
+                    filterButtons.forEach(function (b) { b.classList.remove('active'); });
+                    this.classList.add('active');
+
+                    sponsorSlides.forEach(function (slide) {
+                        var slideType = slide.getAttribute('data-sponsor-type');
+                        if (type === 'all' || slideType === type) {
+                            slide.style.display = '';
+                        } else {
+                            slide.style.display = 'none';
+                        }
+                    });
+
+                    sponsorsSwiper.update();
+                    sponsorsSwiper.slideTo(0);
+                });
+            });
         });
     </script>
 @endpush

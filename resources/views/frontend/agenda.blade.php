@@ -65,10 +65,10 @@
                                             </li>
 
                                             @endforeach
-                                 
+                                      
                                            
                                             <li>
-                                                <a class="site-filled-btn white" href="ar/agenda/2025-11-05.html">
+                                                <a class="site-filled-btn white" href="{{ route('agenda.show', $day) }}">
                                                     {{ app()->getLocale() == 'ar' ? 'عرض الكل' : 'View All' }}
                                                 </a>
                                             </li>

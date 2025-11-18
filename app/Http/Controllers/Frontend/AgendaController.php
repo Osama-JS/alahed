@@ -23,4 +23,20 @@ class AgendaController extends Controller
 
         return view('frontend.agenda', compact('conference', 'agendaDays'));
     }
+
+    public function show(AgendaDay $day)
+    {
+        $conference = Conference::where('is_active', true)->first();
+
+        if (!$conference || $day->conference_id !== $conference->id) {
+            return redirect()->route('agenda');
+        }
+
+        $day->load('sessions');
+
+        return view('frontend.agenda-day', [
+            'conference' => $conference,
+            'day' => $day,
+        ]);
+    }
 }

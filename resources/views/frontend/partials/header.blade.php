@@ -125,17 +125,17 @@
                 </ul>
             </div>
 
-
-            <div class="header-logo">
-                <a href="{{ route('home') }}" title="{{ $siteName }}">
-                    @if ($logoPath)
-                        <img src="{{ asset('storage/' . $logoPath) }}" alt="{{ $siteName }}" />
-                    @else
-                        <img src="{{ asset('assets/frontend/img/logo.png') }}" alt="{{ $siteName }}" />
-                    @endif
-                </a>
+            <div class="header-logo-wrap d-flex align-items-center gap-3">
+                <div class="header-logo">
+                    <a href="{{ route('home') }}" title="{{ $siteName }}">
+                        @if ($logoPath)
+                            <img src="{{ asset('storage/' . $logoPath) }}" alt="{{ $siteName }}" />
+                        @else
+                            <img src="{{ asset('assets/frontend/img/logo.png') }}" alt="{{ $siteName }}" />
+                        @endif
+                    </a>
+                </div>
             </div>
-
 
         </div>
     </div>

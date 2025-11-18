@@ -77,13 +77,19 @@
                                 <td>{{ $faq->order ?? '-' }}</td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('admin.faqs.edit', $faq) }}" class="btn btn-sm btn-warning" title="{{ $isArabic ? 'تعديل' : 'Edit' }}">
+                                        <a href="{{ route('admin.faqs.edit', $faq) }}" class="btn btn-sm btn-warning" title="{{ $isArabic ? '\u062a\u0639\u062f\u064a\u0644' : 'Edit' }}">
                                             <i class="fas fa-pen"></i>
                                         </a>
-                                        <form action="{{ route('admin.faqs.destroy', $faq) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ $isArabic ? 'هل أنت متأكد من الحذف؟' : 'Are you sure you want to delete?' }}')">
+                                        <form action="{{ route('admin.faqs.duplicate', $faq) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ $isArabic ? '\u0647\u0644 \u062a\u0631\u064a\u062f \u062a\u0643\u0631\u0627\u0631 \u0647\u0630\u0627 \u0627\u0644\u0633\u0624\u0627\u0644\u061f' : 'Do you want to duplicate this question?' }}')">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-secondary" title="{{ $isArabic ? '\u062a\u0643\u0631\u0627\u0631' : 'Duplicate' }}">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.faqs.destroy', $faq) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ $isArabic ? '\u0647\u0644 \u0623\u0646\u062a \u0645\u062a\u0623\u0643\u062f \u0645\u0646 \u0627\u0644\u062d\u0630\u0641\u061f' : 'Are you sure you want to delete?' }}')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="{{ $isArabic ? 'حذف' : 'Delete' }}">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="{{ $isArabic ? '\u062d\u0630\u0641' : 'Delete' }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>

@@ -16,7 +16,8 @@ class ExhibitorController extends Controller
             return redirect()->route('home');
         }
 
-        $exhibitors = Exhibitor::where('conference_id', $conference->id)
+        $exhibitors = Exhibitor::with('booth')
+            ->where('conference_id', $conference->id)
             ->orderBy('order')
             ->get();
 
@@ -30,6 +31,8 @@ class ExhibitorController extends Controller
         if (!$conference || $exhibitor->conference_id !== $conference->id) {
             return redirect()->route('home');
         }
+
+        $exhibitor->load('booth');
 
         return view('frontend.exhibitor-show', compact('conference', 'exhibitor'));
     }

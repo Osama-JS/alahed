@@ -24,6 +24,7 @@ Route::get('/sponsors', [SponsorController::class, 'index'])->name('sponsors');
 Route::get('/exhibitors', [ExhibitorController::class, 'index'])->name('exhibitors');
 Route::get('/exhibitors/{exhibitor}', [ExhibitorController::class, 'show'])->name('exhibitors.show');
 Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda');
+Route::get('/agenda/{day}', [AgendaController::class, 'show'])->name('agenda.show');
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
 
 Route::get('/registration', [RegistrationController::class, 'index'])->name('registration');
@@ -34,6 +35,7 @@ Route::get('/previous-editions/{id}', [PreviousEditionController::class, 'show']
 
 Route::get('/booths', [BoothController::class, 'index'])->name('booths');
 Route::get('/booths/{booth}', [BoothController::class, 'show'])->name('booths.show');
+Route::post('/booths/{booth}/book', [BoothController::class, 'book'])->name('booths.book');
 
 // Auth Routes
 Route::get('/dashboard', function () {

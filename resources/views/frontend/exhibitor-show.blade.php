@@ -31,9 +31,6 @@
                         <div class="speaker-conf-logo">
                             <img src="{{ asset('storage/' . $conference->logo) }}" alt="Conference Logo" />
                         </div>
-                        <span class="speaker-conf-label">
-                            {{ app()->getLocale() == 'ar' ? 'شعار المؤتمر' : 'Conference Logo' }}
-                        </span>
                     </div>
                 @endif
             </div>
@@ -63,10 +60,13 @@
                                 {{ $summary }}
                             </p>
                         @endif
-                        @if($exhibitor->booth_number)
+                        @if($exhibitor->booth)
                             <div class="exhibitor-booth-pill">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span>{{ app()->getLocale() == 'ar' ? 'جناح رقم' : 'Booth' }} {{ $exhibitor->booth_number }}</span>
+                                <span>
+                                    {{ app()->getLocale() == 'ar' ? 'البوث:' : 'Booth:' }}
+                                    {{ $exhibitor->booth->name }}
+                                </span>
                             </div>
                         @endif
                     </div>
@@ -234,8 +234,8 @@
     }
 
     .speaker-conf-logo {
-        width: 80px;
-        height: 80px;
+        width: 96px;
+        height: 96px;
         border-radius: 999px;
         background: #ffffff;
         box-shadow: 0 10px 25px rgba(15, 69, 114, 0.25);

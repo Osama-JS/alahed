@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\ParticipantController;
 use App\Http\Controllers\Admin\ExhibitionBoothController;
+use App\Http\Controllers\Admin\BoothBookingController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
@@ -46,6 +47,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // FAQs
     Route::resource('faqs', FaqController::class);
+    Route::post('faqs/{faq}/duplicate', [FaqController::class, 'duplicate'])
+        ->name('faqs.duplicate');
 
     // Participants
     Route::resource('participants', ParticipantController::class);
@@ -54,6 +57,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('exhibition-booths', ExhibitionBoothController::class);
     Route::post('exhibition-booths/{exhibitionBooth}/duplicate', [ExhibitionBoothController::class, 'duplicate'])
         ->name('exhibition-booths.duplicate');
+
+    // Booth Bookings
+    Route::resource('booth-bookings', BoothBookingController::class)->only(['index', 'show', 'update']);
 
     // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');

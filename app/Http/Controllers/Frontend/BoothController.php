@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Conference;
 use App\Models\ExhibitionBooth;
+use App\Models\BoothBooking;
+use Illuminate\Http\Request;
 
 class BoothController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $conference = Conference::where('is_active', true)->first();
 
@@ -16,8 +18,14 @@ class BoothController extends Controller
             return view('frontend.no-active-conference');
         }
 
-        $booths = ExhibitionBooth::with(['participant', 'exhibitor'])
-            ->where('conference_id', $conference->id)
+        $boothsQuery = ExhibitionBooth::with(['participant', 'exhibitor'])
+            ->where('conference_id', $conference->id);
+
+        if ($request->filled('status') && in_array($request->status, ['available', 'reserved'])) {
+            $boothsQuery->where('status', $request->status);
+        }
+
+        $booths = $boothsQuery
             ->orderBy('order')
             ->orderBy('type')
             ->get();
@@ -28,5 +36,27 @@ class BoothController extends Controller
     public function show(ExhibitionBooth $booth)
     {
         return view('frontend.booth-detail', compact('booth'));
+    }
+
+    public function book(Request $request, ExhibitionBooth $booth)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'company' => ['nullable', 'string', 'max:255'],
+            'website' => ['nullable', 'string', 'max:255'],
+            'business_type' => ['nullable', 'string', 'max:255'],
+            'notes' => ['nullable', 'string'],
+        ]);
+
+        BoothBooking::create(array_merge($validated, [
+            'exhibition_booth_id' => $booth->id,
+            'status' => 'pending',
+        ]));
+
+        return back()->with('success', app()->getLocale() === 'ar'
+            ? 'تم إرسال طلب الحجز بنجاح، وسيتم التواصل معك من قبل فريق التنظيم.'
+            : 'Your booking request has been submitted. The organizing team will contact you soon.');
     }
 }

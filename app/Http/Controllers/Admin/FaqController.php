@@ -89,4 +89,18 @@ class FaqController extends Controller
         $faq->delete();
         return redirect()->route('admin.faqs.index')->with('success', 'تم حذف السؤال بنجاح');
     }
+
+    public function duplicate(Faq $faq)
+    {
+        $newFaq = $faq->replicate();
+
+        // ضع السؤال المكرر في نهاية ترتيب الأسئلة لنفس المؤتمر
+        $maxOrder = Faq::where('conference_id', $faq->conference_id)->max('order');
+        $newFaq->order = $maxOrder ? $maxOrder + 1 : ($faq->order ?? 1);
+
+        $newFaq->save();
+
+        return redirect()->route('admin.faqs.index')
+            ->with('success', 'تم تكرار السؤال بنجاح');
+    }
 }

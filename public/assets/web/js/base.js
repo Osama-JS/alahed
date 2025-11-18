@@ -54,6 +54,18 @@ $(document).ready(function () {
         });
     }
 
+    //- exhibitors swiper (home page)
+    if ($(".exhb-swiper").length) {
+        var exhbSwiper = new Swiper(".exhb-swiper", {
+            slidesPerView: "auto",
+            spaceBetween: 24,
+            navigation: {
+                nextEl: "#exhibitors .custom-swiper-next",
+                prevEl: "#exhibitors .custom-swiper-prev",
+            },
+        });
+    }
+
     //- gates swiper
     if ($(".gates-swiper").length) {
         var swiper = new Swiper(".gates-swiper", {

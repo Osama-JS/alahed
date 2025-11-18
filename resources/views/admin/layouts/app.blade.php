@@ -16,6 +16,7 @@
         ['route' => 'admin.sponsors.index', 'icon' => 'fas fa-handshake-angle', 'label' => ['ar' => 'الرعاة', 'en' => 'Sponsors']],
         ['route' => 'admin.exhibitors.index', 'icon' => 'fas fa-store', 'label' => ['ar' => 'العارضون', 'en' => 'Exhibitors']],
         ['route' => 'admin.exhibition-booths.index', 'icon' => 'fas fa-th', 'label' => ['ar' => 'بوثات المعرض', 'en' => 'Exhibition Booths']],
+        ['route' => 'admin.booth-bookings.index', 'icon' => 'fas fa-book', 'label' => ['ar' => 'طلبات حجز البوثات', 'en' => 'Booth Bookings']],
         ['route' => 'admin.statistics.index', 'icon' => 'fas fa-chart-column', 'label' => ['ar' => 'الإحصاءات', 'en' => 'Statistics']],
         ['route' => 'admin.agenda-days.index', 'icon' => 'fas fa-calendar-day', 'label' => ['ar' => 'أيام الجدول', 'en' => 'Agenda Days']],
         ['route' => 'admin.agenda-sessions.index', 'icon' => 'fas fa-clock', 'label' => ['ar' => 'جلسات الجدول', 'en' => 'Agenda Sessions']],

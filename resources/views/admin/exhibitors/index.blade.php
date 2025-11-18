@@ -25,7 +25,7 @@
                 </select>
             </div>
             <div class="col-lg-6">
-                <label class="form-label">{{ $isArabic ? 'بحث بالاسم أو رقم الجناح' : 'Search by name or booth' }}</label>
+                <label class="form-label">{{ $isArabic ? 'بحث بالاسم أو البوث' : 'Search by name or booth' }}</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                     <input type="text" name="search" class="form-control" value="{{ $filters['search'] ?? '' }}" placeholder="{{ $isArabic ? 'ابحث عن عارض...' : 'Find an exhibitor...' }}">
@@ -58,7 +58,7 @@
                             <th>{{ $isArabic ? 'الاسم (عربي)' : 'Name (AR)' }}</th>
                             <th>{{ $isArabic ? 'الاسم (إنجليزي)' : 'Name (EN)' }}</th>
                             <th>{{ $isArabic ? 'وصف العارض' : 'Summary' }}</th>
-                            <th>{{ $isArabic ? 'الجناح' : 'Booth' }}</th>
+                            <th>{{ $isArabic ? 'البوث' : 'Booth' }}</th>
                             <th>{{ $isArabic ? 'المؤتمر' : 'Conference' }}</th>
                             <th>{{ $isArabic ? 'الترتيب' : 'Order' }}</th>
                             <th class="text-center">{{ $isArabic ? 'إجراءات' : 'Actions' }}</th>
@@ -90,8 +90,8 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($exhibitor->booth_number)
-                                        <span class="badge-soft">{{ $exhibitor->booth_number }}</span>
+                                    @if($exhibitor->booth)
+                                        <span class="badge-soft">{{ $exhibitor->booth->name }}</span>
                                     @else
                                         <span class="text-muted">-</span>
                                     @endif
