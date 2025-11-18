@@ -145,7 +145,7 @@
 <!-- Mobile Navigation -->
 <div class="offcanvas offcanvas-start mobile-nav-wrapper d-lg-none" tabindex="-1" id="offcanvasLeft"
     aria-labelledby="offcanvasLeftLabel">
-    <div class="offcanvas-header mobile-nav-padding">
+    <div class="offcanvas-header mobile-nav-padding d-flex justify-content-between align-items-center">
         <div class="mobile-nav-header">
             <a href="{{ route('home') }}" title="{{ $siteName }}">
                 @if ($logoPath)
@@ -155,6 +155,10 @@
                 @endif
             </a>
         </div>
+        <button type="button" class="btn btn-close  " data-bs-dismiss="offcanvas" aria-label="Close">
+        {!! app()->getLocale() == 'ar' ? '' : '<i class="fas fa-times"></i>' !!}
+
+</button>
     </div>
     <div class="offcanvas-body mobile-nav-padding">
         <div class="mobile-nav-body">
@@ -174,41 +178,65 @@
                 </li>
                 <li data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft">
                     <a href="{{ route('about') }}">
+                        <div class="nav-icon">
+                            <i class="fas fa-info-circle" style="color:#006f93;"></i>
+                        </div>
                         <span>{{ $locale == 'ar' ? 'من نحن' : 'About' }}</span>
                     </a>
                 </li>
                 <li data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft">
                     <a href="{{ route('speakers') }}">
+                        <div class="nav-icon">
+                            <i class="fas fa-microphone" style="color:#006f93;"></i>
+                        </div>
                         <span>{{ $locale == 'ar' ? 'المتحدثون' : 'Speakers' }}</span>
                     </a>
                 </li>
                 <li data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft">
                     <a href="{{ route('exhibitors') }}">
+                        <div class="nav-icon">
+                            <i class="fas fa-store" style="color:#006f93;"></i>
+                        </div>
                         <span>{{ $locale == 'ar' ? 'العارضون' : 'Exhibitors' }}</span>
                     </a>
                 </li>
                 <li data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft">
                     <a href="{{ route('booths') }}">
+                        <div class="nav-icon">
+                            <i class="fas fa-th-large" style="color:#006f93;"></i>
+                        </div>
                         <span>{{ $locale == 'ar' ? 'المخطط والحجوزات' : 'Floor Plan & Bookings' }}</span>
                     </a>
                 </li>
                 <li data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft">
                     <a href="{{ route('agenda') }}">
+                        <div class="nav-icon">
+                            <i class="fas fa-calendar-alt" style="color:#006f93;"></i>
+                        </div>
                         <span>{{ $locale == 'ar' ? 'جدول الأعمال' : 'Agenda' }}</span>
                     </a>
                 </li>
                 <li data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft">
                     <a href="{{ route('gallery') }}">
+                        <div class="nav-icon">
+                            <i class="fas fa-image" style="color:#006f93;"></i>
+                        </div>
                         <span>{{ $locale == 'ar' ? 'معرض الصور' : 'Gallery' }}</span>
                     </a>
                 </li>
                 <li data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft">
                     <a href="{{ route('previous-editions') }}">
+                        <div class="nav-icon">
+                            <i class="fas fa-history" style="color:#006f93;"></i>
+                        </div>
                         <span>{{ $locale == 'ar' ? 'النسخ السابقة' : 'Previous Editions' }}</span>
                     </a>
                 </li>
                 <li data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft">
                     <a href="{{ route('registration') }}">
+                        <div class="nav-icon">
+                            <i class="fas fa-edit" style="color:#006f93;"></i>
+                        </div>
                         <span>{{ $locale == 'ar' ? 'التسجيل' : 'Registration' }}</span>
                     </a>
                 </li>

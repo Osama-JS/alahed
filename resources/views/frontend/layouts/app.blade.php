@@ -176,6 +176,84 @@
             font-size: 13px;
         }
 
+        /* Mobile navigation modern styling */
+        .mobile-nav-wrapper.offcanvas {
+            border-radius: 0 24px 24px 0;
+            max-width: 320px;
+            background: #f9fafb;
+        }
+
+        [dir="rtl"] .mobile-nav-wrapper.offcanvas {
+            border-radius: 24px 0 0 24px;
+        }
+
+        .mobile-nav-wrapper .offcanvas-header {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .mobile-nav-header a img {
+            max-height: 50px;
+            width: auto;
+        }
+
+        .mobile-nav-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background-color: #0F4572;
+            opacity: 1;
+            box-shadow: 0 6px 18px rgba(15, 69, 114, 0.35);
+            filter: invert(1) brightness(200%);
+        }
+
+        .mobile-nav-body .mobile-nav-list {
+            list-style: none;
+            margin: 0;
+            padding: 8px 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-nav-body .mobile-nav-list li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 4px;
+            border-radius: 999px;
+            text-decoration: none;
+            color: #111827;
+            font-size: 0.95rem;
+        }
+
+        .mobile-nav-body .mobile-nav-list li a .nav-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: #E5F3FF;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-nav-body .mobile-nav-list li a span {
+            flex: 1;
+        }
+
+        .mobile-nav-body .mobile-nav-list li a:hover {
+            background: linear-gradient(90deg, rgba(15, 69, 114, 0.1), rgba(0, 170, 172, 0.12));
+            color: #0F4572;
+        }
+
+        .mobile-nav-body .mobile-nav-list li a.active {
+            background: linear-gradient(135deg, #0F4572, #00AAAC);
+            color: #ffffff;
+        }
+
+        .mobile-nav-body .mobile-nav-list li a.active .nav-icon {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
         @media (max-width: 768px) {
             .footer-wrap {
                 padding: 24px 16px 12px;
