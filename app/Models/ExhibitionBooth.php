@@ -17,6 +17,7 @@ class ExhibitionBooth extends Model
         'height',
         'area',
         'price',
+        'price_before_vat',
         'currency',
         'status',
         'participant_id',
@@ -34,6 +35,7 @@ class ExhibitionBooth extends Model
         'height' => 'decimal:2',
         'area' => 'decimal:2',
         'price' => 'decimal:2',
+        'price_before_vat' => 'decimal:2',
         'reserved_at' => 'datetime',
     ];
 
@@ -101,6 +103,15 @@ class ExhibitionBooth extends Model
     public function getFormattedPriceAttribute()
     {
         return number_format($this->price, 2) . ' ' . $this->currency;
+    }
+
+    public function getFormattedPriceBeforeVatAttribute()
+    {
+        if ($this->price_before_vat === null) {
+            return null;
+        }
+
+        return number_format($this->price_before_vat, 2) . ' ' . $this->currency;
     }
 
     public function getFormattedAreaAttribute()

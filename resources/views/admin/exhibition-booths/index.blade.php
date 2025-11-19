@@ -79,6 +79,7 @@
                         <th>النوع</th>
                         <th>الأبعاد</th>
                         <th>المساحة</th>
+                        <th>السعر قبل الضريبة</th>
                         <th>السعر</th>
                         <th>الحالة</th>
                         <th>المؤتمر</th>
@@ -114,6 +115,13 @@
                         </td>
                         <td>{{ $booth->formatted_dimensions }}</td>
                         <td>{{ $booth->formatted_area }}</td>
+                        <td>
+                            @if(!is_null($booth->price_before_vat))
+                                <strong>{{ number_format($booth->price_before_vat, 2) }} {{ $booth->currency }}</strong>
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
                         <td><strong>{{ number_format($booth->price, 2) }} {{ $booth->currency }}</strong></td>
                         <td>
                             @if($booth->status == 'available')

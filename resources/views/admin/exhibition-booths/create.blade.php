@@ -102,16 +102,27 @@
                 </div>
 
                 <!-- Price -->
-                <div class="col-md-6 mb-3">
-                    <label for="price" class="form-label">السعر <span class="text-danger">*</span></label>
+                <div class="col-md-4 mb-3">
+                    <label for="price" class="form-label">السعر بعد الضريبة <span class="text-danger">*</span></label>
                     <input type="number" step="0.01" name="price" id="price" class="form-control @error('price') is-invalid @enderror" value="{{ old('price', 0) }}" required placeholder="11000.00">
                     @error('price')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
+                    <small class="form-text text-muted">السعر الإجمالي (يشمل الضريبة إن وُجدت)</small>
+                </div>
+
+                <!-- Price Before VAT (optional) -->
+                <div class="col-md-4 mb-3">
+                    <label for="price_before_vat" class="form-label">السعر قبل الضريبة (اختياري)</label>
+                    <input type="number" step="0.01" name="price_before_vat" id="price_before_vat" class="form-control @error('price_before_vat') is-invalid @enderror" value="{{ old('price_before_vat') }}" placeholder="10000.00">
+                    @error('price_before_vat')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <small class="form-text text-muted">اتركه فارغاً إذا لم ترغب في تخزين السعر قبل الضريبة</small>
                 </div>
 
                 <!-- Currency -->
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <label for="currency" class="form-label">العملة</label>
                     <input type="text" name="currency" id="currency" class="form-control @error('currency') is-invalid @enderror" value="{{ old('currency', 'SAR') }}" placeholder="SAR">
                     @error('currency')

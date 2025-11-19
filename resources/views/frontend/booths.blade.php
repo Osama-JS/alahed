@@ -165,6 +165,10 @@
 
                                     <div class="booth-card-footer">
                                         <div class="price">
+                                            @if(!is_null($booth->price_before_vat))
+                                                <span class="price-label">{{ $locale == 'ar' ? 'السعر قبل الضريبة' : 'Price (before VAT)' }}</span>
+                                                <span class="price-value d-block mb-1">{{ number_format($booth->price_before_vat, 2) }} {{ $booth->currency }}</span>
+                                            @endif
                                             <span class="price-label">{{ $locale == 'ar' ? 'السعر' : 'Price' }}</span>
                                             <span class="price-value">{{ number_format($booth->price, 2) }} {{ $booth->currency }}</span>
                                         </div>
@@ -245,7 +249,13 @@
                                         @endif
                                     </div>
                                     <div class="bt-col bt-col-price">
-                                        <span class="text-primary fw-bold">
+                                        @if(!is_null($booth->price_before_vat))
+                                            <div class="text-muted small">
+                                                {{ $locale == 'ar' ? 'قبل الضريبة:' : 'Before VAT:' }}
+                                                {{ number_format($booth->price_before_vat, 2) }} {{ $booth->currency }}
+                                            </div>
+                                        @endif
+                                        <span class="text-primary fw-bold d-block">
                                             {{ number_format($booth->price, 2) }} {{ $booth->currency }}
                                         </span>
                                     </div>

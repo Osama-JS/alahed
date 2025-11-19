@@ -33,7 +33,21 @@
                             <tr>
                                 <td>{{ $bookings->firstItem() + $index }}</td>
                                 <td>
-                                    <strong>{{ optional($booking->booth)->name }}</strong>
+                                    @if($booking->booth)
+                                        <strong class="d-block">{{ $booking->booth->name }}</strong>
+                                        @if(!is_null($booking->booth->price_before_vat))
+                                            <small class="d-block text-muted">
+                                                {{ $isArabic ? 'قبل الضريبة:' : 'Before VAT:' }}
+                                                {{ number_format($booking->booth->price_before_vat, 2) }} {{ $booking->booth->currency }}
+                                            </small>
+                                        @endif
+                                        <small class="d-block text-muted">
+                                            {{ $isArabic ? 'السعر:' : 'Price:' }}
+                                            {{ number_format($booking->booth->price, 2) }} {{ $booking->booth->currency }}
+                                        </small>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
                                 </td>
                                 <td>
                                     <div class="fw-semibold">{{ $booking->name }}</div>

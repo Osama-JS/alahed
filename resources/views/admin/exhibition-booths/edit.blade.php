@@ -101,16 +101,26 @@
                 </div>
 
                 <!-- Price -->
-                <div class="col-md-6 mb-3">
-                    <label for="price" class="form-label">السعر <span class="text-danger">*</span></label>
+                <div class="col-md-4 mb-3">
+                    <label for="price" class="form-label">السعر بعد الضريبة <span class="text-danger">*</span></label>
                     <input type="number" step="0.01" name="price" id="price" class="form-control @error('price') is-invalid @enderror" value="{{ old('price', $exhibitionBooth->price) }}" required>
                     @error('price')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <small class="form-text text-muted">السعر الإجمالي (يشمل الضريبة إن وُجدت)</small>
+                </div>
+
+                <!-- Price Before VAT (optional) -->
+                <div class="col-md-4 mb-3">
+                    <label for="price_before_vat" class="form-label">السعر قبل الضريبة (اختياري)</label>
+                    <input type="number" step="0.01" name="price_before_vat" id="price_before_vat" class="form-control @error('price_before_vat') is-invalid @enderror" value="{{ old('price_before_vat', $exhibitionBooth->price_before_vat) }}">
+                    @error('price_before_vat')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <!-- Currency -->
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                     <label for="currency" class="form-label">العملة</label>
                     <input type="text" name="currency" id="currency" class="form-control @error('currency') is-invalid @enderror" value="{{ old('currency', $exhibitionBooth->currency) }}">
                     @error('currency')

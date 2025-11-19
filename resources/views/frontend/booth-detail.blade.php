@@ -66,6 +66,12 @@
                             <div class="fact-value">{{ number_format($pricePerSqm, 2) }} {{ $booth->currency }}</div>
                         </div>
                     @endif
+                    @if(!is_null($booth->price_before_vat))
+                        <div class="fact-item">
+                            <div class="fact-label">{{ $locale == 'ar' ? 'السعر قبل الضريبة' : 'Price before VAT' }}</div>
+                            <div class="fact-value">{{ number_format($booth->price_before_vat, 2) }} {{ $booth->currency }}</div>
+                        </div>
+                    @endif
                 </div>
                 @endif
 
@@ -116,6 +122,10 @@
                         @endif
 
                         <div class="info-item mb-4">
+                            @if(!is_null($booth->price_before_vat))
+                                <strong>{{ $locale == 'ar' ? 'السعر قبل الضريبة:' : 'Price before VAT:' }}</strong>
+                                <p class="mb-1">{{ number_format($booth->price_before_vat, 2) }} {{ $booth->currency }}</p>
+                            @endif
                             <strong>{{ $locale == 'ar' ? 'السعر:' : 'Price:' }}</strong>
                             <p class="text-primary fs-3 mb-0">{{ number_format($booth->price, 2) }} {{ $booth->currency }}</p>
                         </div>

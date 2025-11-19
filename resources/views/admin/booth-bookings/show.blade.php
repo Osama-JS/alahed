@@ -51,8 +51,18 @@
                     <p class="mb-1"><strong>{{ $booking->booth->name }}</strong></p>
                     <p class="mb-1 text-muted">{{ $isArabic ? 'المؤتمر:' : 'Conference:' }}
                         {{ $locale === 'ar' ? $booking->booth->conference->title_ar : $booking->booth->conference->title_en }}</p>
-                    <p class="mb-0 text-muted">{{ $isArabic ? 'الحالة الحالية للبوث:' : 'Current booth status:' }}
+                    <p class="mb-1 text-muted">{{ $isArabic ? 'الحالة الحالية للبوث:' : 'Current booth status:' }}
                         {{ $booking->booth->status_name }}</p>
+                    @if(!is_null($booking->booth->price_before_vat))
+                        <p class="mb-1">
+                            <strong>{{ $isArabic ? 'السعر قبل الضريبة:' : 'Price before VAT:' }}</strong>
+                            {{ number_format($booking->booth->price_before_vat, 2) }} {{ $booking->booth->currency }}
+                        </p>
+                    @endif
+                    <p class="mb-0">
+                        <strong>{{ $isArabic ? 'السعر:' : 'Price:' }}</strong>
+                        {{ number_format($booking->booth->price, 2) }} {{ $booking->booth->currency }}
+                    </p>
                 @else
                     <p class="text-muted mb-0">{{ $isArabic ? 'البوث غير متوفر.' : 'Booth not available.' }}</p>
                 @endif
