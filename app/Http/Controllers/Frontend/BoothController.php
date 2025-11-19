@@ -48,7 +48,14 @@ class BoothController extends Controller
             'website' => ['nullable', 'string', 'max:255'],
             'business_type' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
+            'bank_receipt' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,webp', 'max:5120'],
         ]);
+
+        // Handle optional bank receipt upload
+        if ($request->hasFile('bank_receipt')) {
+            $path = $request->file('bank_receipt')->store('booth-bank-receipts', 'public');
+            $validated['bank_receipt'] = $path;
+        }
 
         BoothBooking::create(array_merge($validated, [
             'exhibition_booth_id' => $booth->id,

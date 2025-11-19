@@ -24,6 +24,7 @@
                             <th>{{ $isArabic ? 'العميل' : 'Client' }}</th>
                             <th>{{ $isArabic ? 'الشركة' : 'Company' }}</th>
                             <th>{{ $isArabic ? 'الحالة' : 'Status' }}</th>
+                            <th>{{ $isArabic ? 'الإيصال البنكي' : 'Bank Receipt' }}</th>
                             <th>{{ $isArabic ? 'تاريخ الطلب' : 'Requested At' }}</th>
                             <th class="text-center">{{ $isArabic ? 'تفاصيل' : 'Details' }}</th>
                         </tr>
@@ -61,6 +62,15 @@
                                         @else bg-secondary @endif">
                                         {{ $booking->status }}
                                     </span>
+                                </td>
+                                <td>
+                                    @if($booking->bank_receipt)
+                                        <a href="{{ asset('storage/' . $booking->bank_receipt) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                            {{ $isArabic ? 'عرض الإيصال' : 'View Receipt' }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
                                 </td>
                                 <td>{{ $booking->created_at?->format('Y-m-d H:i') }}</td>
                                 <td class="text-center">

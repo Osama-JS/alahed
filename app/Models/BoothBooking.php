@@ -17,6 +17,7 @@ class BoothBooking extends Model
         'business_type',
         'notes',
         'status',
+        'bank_receipt',
     ];
 
     public function booth(): BelongsTo

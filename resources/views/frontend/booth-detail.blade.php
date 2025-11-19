@@ -148,7 +148,7 @@
                                 </div>
                             @endif
 
-                            <form method="POST" action="{{ route('booths.book', $booth) }}" class="booth-booking-form">
+                            <form method="POST" action="{{ route('booths.book', $booth) }}" class="booth-booking-form" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-2">
                                     <label class="form-label">{{ $locale == 'ar' ? 'الاسم الكامل' : 'Full Name' }}</label>
@@ -177,6 +177,15 @@
                                 <div class="mb-3">
                                     <label class="form-label">{{ $locale == 'ar' ? 'ملاحظات إضافية' : 'Additional Notes' }}</label>
                                     <textarea name="notes" rows="3" class="form-control">{{ old('notes') }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">{{ $locale == 'ar' ? 'رفع الإيصال البنكي (اختياري)' : 'Upload Bank Receipt (optional)' }}</label>
+                                    <input type="file" name="bank_receipt" class="form-control">
+                                    <small class="form-text text-muted">
+                                        {{ $locale == 'ar'
+                                            ? 'الملفات المسموح بها: PDF أو صور (JPG, PNG, WEBP) بحد أقصى 5 ميغابايت.'
+                                            : 'Allowed files: PDF or images (JPG, PNG, WEBP) up to 5 MB.' }}
+                                    </small>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-lg w-100">
                                     {{ $locale == 'ar' ? 'إرسال طلب الحجز' : 'Submit Booking Request' }}

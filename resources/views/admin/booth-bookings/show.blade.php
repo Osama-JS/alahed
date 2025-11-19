@@ -37,6 +37,17 @@
 
                     <dt class="col-sm-3">{{ $isArabic ? 'ملاحظات' : 'Notes' }}</dt>
                     <dd class="col-sm-9">{{ $booking->notes ?? '-' }}</dd>
+
+                    <dt class="col-sm-3">{{ $isArabic ? 'الإيصال البنكي' : 'Bank Receipt' }}</dt>
+                    <dd class="col-sm-9">
+                        @if($booking->bank_receipt)
+                            <a href="{{ asset('storage/' . $booking->bank_receipt) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                {{ $isArabic ? 'عرض / تحميل الإيصال' : 'View / Download Receipt' }}
+                            </a>
+                        @else
+                            <span class="text-muted">{{ $isArabic ? 'لم يتم إرفاق إيصال' : 'No receipt uploaded' }}</span>
+                        @endif
+                    </dd>
                 </dl>
             </div>
         </div>
