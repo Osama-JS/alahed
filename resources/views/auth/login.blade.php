@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - نظام علاء الدين</title>
+    <title>تسجيل الدخول </title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
-        
+
         body {
             font-family: 'Tajawal', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -17,7 +17,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .login-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -28,7 +28,7 @@
             min-height: 600px;
             display: flex;
         }
-        
+
         .login-illustration {
             background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
             color: white;
@@ -40,7 +40,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .login-illustration::before {
             content: '';
             position: absolute;
@@ -52,7 +52,7 @@
             opacity: 0.5;
             z-index: 0;
         }
-        
+
         .login-form {
             padding: 60px 50px;
             width: 55%;
@@ -60,12 +60,12 @@
             flex-direction: column;
             justify-content: center;
         }
-        
+
         .form-group {
             margin-bottom: 1.5rem;
             position: relative;
         }
-        
+
         .form-control {
             width: 100%;
             padding: 12px 20px 12px 45px;
@@ -75,13 +75,13 @@
             transition: all 0.3s ease;
             background-color: #f8fafc;
         }
-        
+
         .form-control:focus {
             border-color: #4361ee;
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
             outline: none;
         }
-        
+
         .input-icon {
             position: absolute;
             right: 15px;
@@ -89,7 +89,7 @@
             transform: translateY(-50%);
             color: #94a3b8;
         }
-        
+
         .btn {
             display: inline-block;
             background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
@@ -105,19 +105,19 @@
             width: 100%;
             margin-top: 10px;
         }
-        
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
         }
-        
+
         .social-login {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin: 20px 0;
         }
-        
+
         .social-btn {
             width: 45px;
             height: 45px;
@@ -129,28 +129,28 @@
             font-size: 20px;
             transition: all 0.3s ease;
         }
-        
+
         .social-btn:hover {
             transform: translateY(-3px);
         }
-        
+
         .facebook { background-color: #3b5998; }
         .twitter { background-color: #1da1f2; }
         .google { background-color: #db4437; }
-        
+
         @media (max-width: 768px) {
             .login-container {
                 flex-direction: column;
                 max-width: 90%;
                 margin: 20px auto;
             }
-            
+
             .login-illustration,
             .login-form {
                 width: 100%;
                 padding: 40px 30px;
             }
-            
+
             .login-illustration {
                 display: none;
             }
@@ -194,19 +194,19 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="login-form">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">تسجيل الدخول</h2>
                 <p class="text-gray-600">أدخل بيانات اعتمادك للوصول إلى حسابك</p>
             </div>
-            
+
             <form method="POST" action="{{ route('login') }}">
                 @csrf
-                
+
                 <div class="form-group">
                     <i class="fas fa-envelope input-icon"></i>
-                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
+                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                            name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
                            placeholder="البريد الإلكتروني">
                     @error('email')
@@ -215,10 +215,10 @@
                         </span>
                     @enderror
                 </div>
-                
+
                 <div class="form-group">
                     <i class="fas fa-lock input-icon"></i>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
                            name="password" required autocomplete="current-password" placeholder="كلمة المرور">
                     @error('password')
                         <span class="text-red-500 text-sm mt-1" role="alert">
@@ -226,27 +226,27 @@
                         </span>
                     @enderror
                 </div>
-                
+
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center">
-                        <input class="form-checkbox h-5 w-5 text-blue-600" type="checkbox" name="remember" 
+                        <input class="form-checkbox h-5 w-5 text-blue-600" type="checkbox" name="remember"
                                id="remember" {{ old('remember') ? 'checked' : '' }}>
                         <label class="mr-2 text-gray-700" for="remember">
                             تذكرني
                         </label>
                     </div>
-                 
+
                 </div>
-                
+
                 <button type="submit" class="btn">
                     تسجيل الدخول
                     <i class="fas fa-arrow-left mr-2"></i>
                 </button>
             </form>
-            
-           
-            
-           
+
+
+
+
         </div>
     </div>
 </body>

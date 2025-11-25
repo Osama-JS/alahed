@@ -134,6 +134,11 @@
                             <hr>
                             <h5 class="mb-3">{{ $locale == 'ar' ? 'طلب حجز هذا البوث' : 'Request to Book this Booth' }}</h5>
 
+                            أيبان: البنك الأهلي
+
+                            SA7110000023900000420610 )
+                            -
+                            مؤسسة العهد للصيانة والتشغيل
                             @if(session('success'))
                                 <div class="alert alert-success">{{ session('success') }}</div>
                             @endif
@@ -179,7 +184,7 @@
                                     <textarea name="notes" rows="3" class="form-control">{{ old('notes') }}</textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">{{ $locale == 'ar' ? 'رفع الإيصال البنكي (اختياري)' : 'Upload Bank Receipt (optional)' }}</label>
+                                    <label class="form-label">{{ $locale == 'ar' ? 'رفع الإيصال البنكي ' : 'Upload Bank Receipt ' }}</label>
                                     <input type="file" name="bank_receipt" class="form-control">
                                     <small class="form-text text-muted">
                                         {{ $locale == 'ar'

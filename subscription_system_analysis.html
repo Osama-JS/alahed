@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحليل شامل لنظام الاشتراكات وبطاقات الزائر - مشروع العهد</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2d3748;
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            position: relative;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            right: 0;
+            width: 100px;
+            height: 3px;
+            background: #764ba2;
+        }
+
+        h3 {
+            color: #4a5568;
+            font-size: 1.5rem;
+            margin: 30px 0 15px 0;
+            padding-right: 15px;
+            border-right: 4px solid #667eea;
+        }
+
+        h4 {
+            color: #2d3748;
+            font-size: 1.2rem;
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background: #f7fafc;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 12px;
+            border-right: 5px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        code {
+            background: #1e293b;
+            color: #10b981;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            display: inline-block;
+        }
+
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            direction: ltr;
+            text-align: left;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 15px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: right;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 3px;
+        }
+
+        .badge-primary {
+            background: #667eea;
+            color: #fff;
+        }
+
+        .badge-success {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .badge-warning {
+            background: #f59e0b;
+            color: #fff;
+        }
+
+        .badge-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .badge-info {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .alert {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-right: 5px solid;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        .workflow-step {
+            background: #fff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-right: 4px solid #667eea;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .workflow-step::before {
+            content: attr(data-step);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #667eea;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .workflow-step h4 {
+            margin-right: 60px;
+        }
+
+        footer {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .tech-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+        }
+
+        .tech-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-box h4 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎫 تحليل شامل لنظام الاشتراكات وبطاقات الزائر</h1>
+            <p>مشروع العهد - نظام إدارة المؤتمرات والمعارض</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">تاريخ التحليل: 25 نوفمبر 2025</p>
+        </header>
+
+        <div class="content">
+            <!-- ملخص تنفيذي -->
+            <h2>📋 الملخص التنفيذي</h2>
+            <div class="section">
+                <p>
+                    يهدف هذا التقرير إلى تقديم تحليل شامل ومفصل لتطوير <span class="highlight">نظام إدارة الاشتراكات وبطاقات الزائر</span>
+                    لمشروع العهد (نظام إدارة المؤتمرات والمعارض). يتضمن النظام المقترح آلية متكاملة لاستقبال طلبات الاشتراك من الزوار،
+                    مراجعتها والموافقة عليها من قبل الإدارة، وإصدار بطاقات دخول رقمية احترافية تحتوي على باركود QR للتحقق من الهوية
+                    عند نقاط الدخول.
+                </p>
+
+                <div class="alert alert-info">
+                    <strong>📌 الهدف الرئيسي:</strong> تحويل جدول <code>participants</code> الحالي إلى نظام اشتراكات متقدم يتضمن
+                    آلية موافقة، إرسال بريد إلكتروني آلي، وإصدار بطاقات PDF احترافية مع باركود QR قابل للمسح والتحقق.
+                </div>
+            </div>
+
+            <!-- الوضع الحالي -->
+            <h2>🔍 تحليل الوضع الحالي</h2>
+            <div class="section">
+                <h3>البنية الحالية للمشروع</h3>
+                <p>بناءً على فحص المشروع، تم التعرف على المكونات التالية:</p>
+
+                <h4>1. جدول المشاركين الحالي (participants)</h4>
+                <p>يحتوي على الحقول التالية:</p>
+                <ul>
+                    <li><code>id</code> - المعرف الفريد</li>
+                    <li><code>conference_id</code> - ربط بالمؤتمر</li>
+                    <li><code>name</code> - اسم المشارك</li>
+                    <li><code>email</code> - البريد الإلكتروني</li>
+                    <li><code>phone</code> - رقم الهاتف</li>
+                    <li><code>company</code> - الشركة</li>
+                    <li><code>job_title</code> - المسمى الوظيفي</li>
+                    <li><code>type</code> - نوع الحضور (visitor, exhibitor, speaker, sponsor)</li>
+                    <li><code>booth_id</code> - ربط بالكشك (إن وجد)</li>
+                </ul>
+
+                <h4>2. صفحة التسجيل الحالية</h4>
+                <p>توجد صفحة تسجيل في <code>resources/views/frontend/registration.blade.php</code> تحتوي على نموذج يجمع:</p>
+                <ul>
+                    <li>الاسم الكامل</li>
+                    <li>البريد الإلكتروني</li>
+                    <li>رقم الهاتف</li>
+                    <li>نوع الحضور (4 خيارات)</li>
+                    <li>الشركة والمسمى الوظيفي (اختياري)</li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ النقص الحالي:</strong> لا يوجد حالياً نظام للموافقة على الطلبات، ولا يتم إرسال بريد إلكتروني،
+                    ولا توجد آلية لإصدار بطاقات الدخول أو التحقق منها.
+                </div>
+            </div>
+
+            <!-- المتطلبات المفصلة -->
+            <h2>📝 المتطلبات المفصلة</h2>
+            <div class="section">
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4>✅ 1. نظام الموافقة</h4>
+                        <p>إضافة حقل حالة الطلب (pending, approved, rejected) مع واجهة إدارية للمراجعة والموافقة</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>📧 2. البريد الإلكتروني</h4>
+                        <p>إرسال بريد آلي عند الموافقة يحتوي على رابط تحميل البطاقة</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>🎨 3. بطاقة احترافية</h4>
+                        <p>تصميم بطاقة PDF عالية الجودة تحتوي على بيانات الزائر وشعار المؤتمر</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>📱 4. باركود QR</h4>
+                        <p>توليد QR Code فريد لكل زائر يحتوي على بياناته ورمز التحقق</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>🔐 5. نظام التحقق</h4>
+                        <p>واجهة لمسح الباركود والتحقق من صحة الاشتراك عند نقاط الدخول</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>📊 6. التتبع والإحصائيات</h4>
+                        <p>تسجيل وقت الدخول وإحصائيات الحضور في لوحة التحكم</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التصميم المعماري -->
+            <h2>🏗️ التصميم المعماري للحل</h2>
+
+            <h3>1. تعديلات قاعدة البيانات</h3>
+            <div class="section">
+                <h4>إضافة حقول جديدة لجدول participants</h4>
+                <pre><code>Schema::table('participants', function (Blueprint $table) {
+    // حالة الطلب
+    $table->enum('status', ['pending', 'approved', 'rejected'])
+          ->default('pending')
+          ->after('type');
+
+    // رمز التحقق الفريد (UUID)
+    $table->string('approval_token', 36)
+          ->unique()
+          ->nullable()
+          ->after('status');
+
+    // تاريخ ووقت الموافقة
+    $table->timestamp('approved_at')
+          ->nullable()
+          ->after('approval_token');
+
+    // المستخدم الذي وافق على الطلب
+    $table->foreignId('approved_by')
+          ->nullable()
+          ->constrained('users')
+          ->nullOnDelete()
+          ->after('approved_at');
+
+    // تاريخ ووقت الدخول الفعلي للمعرض
+    $table->timestamp('checked_in_at')
+          ->nullable()
+          ->after('approved_by');
+
+    // المستخدم الذي سجل الدخول
+    $table->foreignId('checked_in_by')
+          ->nullable()
+          ->constrained('users')
+          ->nullOnDelete()
+          ->after('checked_in_at');
+
+    // ملاحظات الإدارة
+    $table->text('admin_notes')
+          ->nullable()
+          ->after('checked_in_by');
+});</code></pre>
+
+                <div class="alert alert-info">
+                    <strong>💡 ملاحظة:</strong> سيتم الحفاظ على جميع الحقول الحالية وإضافة الحقول الجديدة فقط لضمان عدم تأثر
+                    الوظائف الموجودة.
+                </div>
+            </div>
+
+            <h3>2. المكتبات والحزم المطلوبة</h3>
+            <div class="section">
+                <div class="tech-stack">
+                    <div class="tech-card">
+                        <h4>📦 QR Code Generator</h4>
+                        <code>simplesoftwareio/simple-qrcode</code>
+                        <p>لتوليد أكواد QR عالية الجودة</p>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>📄 PDF Generator</h4>
+                        <code>barryvdh/laravel-dompdf</code>
+                        <p>لتوليد ملفات PDF من قوالب Blade</p>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>✉️ Mail System</h4>
+                        <code>Laravel Mail (مدمج)</code>
+                        <p>نظام البريد الإلكتروني المدمج في Laravel</p>
+                    </div>
+
+                    <div class="tech-card">
+                        <h4>🔤 Fonts Support</h4>
+                        <code>Arabic Fonts (DejaVu Sans)</code>
+                        <p>لدعم اللغة العربية في PDF</p>
+                    </div>
+                </div>
+
+                <h4>أوامر التثبيت:</h4>
+                <pre><code># تثبيت مكتبة QR Code
+composer require simplesoftwareio/simple-qrcode
+
+# تثبيت مكتبة PDF
+composer require barryvdh/laravel-dompdf
+
+# نشر ملفات الإعداد
+php artisan vendor:publish --provider="SimpleSoftwareIO\QrCode\QrCodeServiceProvider"
+php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"</code></pre>
+            </div>
+
+            <!-- تدفق العمل -->
+            <h2>🔄 تدفق العمل (Workflow)</h2>
+            <div class="section">
+                <div class="workflow-step" data-step="1">
+                    <h4>تقديم طلب الاشتراك</h4>
+                    <p>الزائر يملأ نموذج التسجيل في الواجهة الأمامية ويختار نوع الزيارة (زائر، عارض، متحدث، راعي)</p>
+                    <ul>
+                        <li>يتم التحقق من صحة البيانات المدخلة</li>
+                        <li>يُنشأ سجل جديد في جدول <code>participants</code> بحالة <code>pending</code></li>
+                        <li>يُولد رمز فريد <code>approval_token</code> باستخدام <code>Str::uuid()</code></li>
+                        <li>يظهر للزائر رسالة تأكيد: "تم استلام طلبك وهو قيد المراجعة"</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-step" data-step="2">
+                    <h4>مراجعة الطلبات في لوحة التحكم</h4>
+                    <p>المسؤول يفتح صفحة إدارة الاشتراكات <code>/admin/participants</code></p>
+                    <ul>
+                        <li>يشاهد قائمة بجميع الطلبات مع فلاتر حسب الحالة</li>
+                        <li>يمكنه عرض تفاصيل كل طلب</li>
+                        <li>يوجد زر "موافقة" وزر "رفض" لكل طلب</li>
+                        <li>يمكنه إضافة ملاحظات إدارية</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-step" data-step="3">
+                    <h4>الموافقة على الطلب</h4>
+                    <p>عند الضغط على زر "موافقة":</p>
+                    <ul>
+                        <li>تحديث حالة الطلب إلى <code>approved</code></li>
+                        <li>حفظ <code>approved_at</code> بالتاريخ والوقت الحالي</li>
+                        <li>حفظ <code>approved_by</code> بمعرف المستخدم الحالي</li>
+                        <li>إطلاق حدث <code>ParticipantApproved</code></li>
+                        <li>إرسال بريد إلكتروني تلقائياً للزائر</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-step" data-step="4">
+                    <h4>إرسال البريد الإلكتروني</h4>
+                    <p>البريد يحتوي على:</p>
+                    <ul>
+                        <li>رسالة ترحيبية مخصصة باسم الزائر</li>
+                        <li>تفاصيل المؤتمر (الاسم، التاريخ، المكان)</li>
+                        <li>رابط مباشر لتحميل البطاقة: <code>/ticket/download/{approval_token}</code></li>
+                        <li>تعليمات استخدام البطاقة</li>
+                        <li>معلومات الاتصال للدعم</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-step" data-step="5">
+                    <h4>تحميل البطاقة</h4>
+                    <p>عند النقر على رابط التحميل:</p>
+                    <ul>
+                        <li>التحقق من صحة <code>approval_token</code></li>
+                        <li>التأكد من أن الحالة <code>approved</code></li>
+                        <li>توليد QR Code يحتوي على بيانات JSON مشفرة</li>
+                        <li>إنشاء ملف PDF احترافي باستخدام قالب Blade</li>
+                        <li>تحميل الملف مباشرة للمستخدم</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-step" data-step="6">
+                    <h4>التحقق عند نقطة الدخول</h4>
+                    <p>عند وصول الزائر للمعرض:</p>
+                    <ul>
+                        <li>مسح QR Code باستخدام قارئ أو تطبيق جوال</li>
+                        <li>فك تشفير البيانات والتحقق من صحتها</li>
+                        <li>البحث في قاعدة البيانات عن الطلب المطابق</li>
+                        <li>التأكد من الحالة <code>approved</code> وعدم الدخول مسبقاً</li>
+                        <li>تسجيل <code>checked_in_at</code> و <code>checked_in_by</code></li>
+                        <li>عرض رسالة نجاح مع بيانات الزائر</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- تصميم البطاقة -->
+            <h2>🎨 تصميم بطاقة الزائر الاحترافية</h2>
+            <div class="section">
+                <h3>مواصفات التصميم</h3>
+                <table>
+                    <tr>
+                        <th>العنصر</th>
+                        <th>الوصف</th>
+                    </tr>
+                    <tr>
+                        <td><strong>الحجم</strong></td>
+                        <td>A6 (105 × 148 mm) أو بطاقة عمل (90 × 54 mm)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>الخلفية</strong></td>
+                        <td>تدرج لوني احترافي أو صورة خلفية مخصصة للمؤتمر</td>
+                    </tr>
+                    <tr>
+                        <td><strong>الشعار</strong></td>
+                        <td>شعار المؤتمر في الأعلى (من جدول conferences)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>البيانات</strong></td>
+                        <td>اسم الزائر، البريد، نوع الزيارة، اسم المؤتمر، التاريخ</td>
+                    </tr>
+                    <tr>
+                        <td><strong>QR Code</strong></td>
+                        <td>200×200 بكسل في الزاوية السفلية</td>
+                    </tr>
+                    <tr>
+                        <td><strong>الخط</strong></td>
+                        <td>DejaVu Sans (يدعم العربية والإنجليزية)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>الألوان</strong></td>
+                        <td>متناسقة مع هوية المؤتمر</td>
+                    </tr>
+                </table>
+
+                <h3>محتوى QR Code</h3>
+                <p>البيانات المشفرة في الباركود (JSON format):</p>
+                <pre><code>{
+    "participant_id": 123,
+    "token": "550e8400-e29b-41d4-a716-446655440000",
+    "conference_id": 1,
+    "conference_code": "CONF2025",
+    "name": "أحمد محمد",
+    "email": "ahmed@example.com",
+    "type": "visitor",
+    "issued_at": "2025-11-25T10:30:00Z"
+}</code></pre>
+
+                <div class="alert alert-success">
+                    <strong>✅ ميزة أمنية:</strong> يتم التحقق من تطابق <code>participant_id</code> و <code>token</code> معاً
+                    لمنع التزوير أو إعادة استخدام البطاقات.
+                </div>
+            </div>
+
+            <!-- البنية البرمجية -->
+            <h2>💻 البنية البرمجية المقترحة</h2>
+
+            <h3>1. Controllers</h3>
+            <div class="section">
+                <h4>RegistrationController.php</h4>
+                <p>للواجهة الأمامية - معالجة طلبات التسجيل</p>
+                <pre><code>class RegistrationController extends Controller
+{
+    public function create(Conference $conference)
+    {
+        return view('frontend.registration', compact('conference'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'type' => 'required|in:visitor,exhibitor,speaker,sponsor',
+            'company' => 'nullable|string|max:255',
+            'job_title' => 'nullable|string|max:255',
+        ]);
+
+        $participant = Participant::create([
+            ...$validated,
+            'conference_id' => $request->conference_id,
+            'status' => 'pending',
+            'approval_token' => Str::uuid(),
+        ]);
+
+        return redirect()->back()
+            ->with('success', 'تم استلام طلبك بنجاح وهو قيد المراجعة');
+    }
+}</code></pre>
+
+                <h4>Admin\ParticipantController.php</h4>
+                <p>لوحة التحكم - إدارة الطلبات</p>
+                <pre><code>class ParticipantController extends Controller
+{
+    public function index(Request $request)
+    {
+        $participants = Participant::with('conference')
+            ->when($request->status, fn($q) => $q->where('status', $request->status))
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.participants.index', compact('participants'));
+    }
+
+    public function approve($id)
+    {
+        $participant = Participant::findOrFail($id);
+
+        $participant->update([
+            'status' => 'approved',
+            'approved_at' => now(),
+            'approved_by' => auth()->id(),
+        ]);
+
+        // إرسال البريد الإلكتروني
+        Mail::to($participant->email)
+            ->send(new ParticipantApprovedMail($participant));
+
+        return redirect()->back()
+            ->with('success', 'تمت الموافقة على الطلب وإرسال البريد الإلكتروني');
+    }
+
+    public function reject($id, Request $request)
+    {
+        $participant = Participant::findOrFail($id);
+
+        $participant->update([
+            'status' => 'rejected',
+            'admin_notes' => $request->reason,
+        ]);
+
+        return redirect()->back()
+            ->with('success', 'تم رفض الطلب');
+    }
+}</code></pre>
+
+                <h4>TicketController.php</h4>
+                <p>توليد وتحميل البطاقات</p>
+                <pre><code>class TicketController extends Controller
+{
+    public function download($token)
+    {
+        $participant = Participant::where('approval_token', $token)
+            ->where('status', 'approved')
+            ->with('conference')
+            ->firstOrFail();
+
+        // توليد QR Code
+        $qrData = json_encode([
+            'participant_id' => $participant->id,
+            'token' => $participant->approval_token,
+            'conference_id' => $participant->conference_id,
+            'conference_code' => $participant->conference->code ?? 'CONF',
+            'name' => $participant->name,
+            'email' => $participant->email,
+            'type' => $participant->type,
+            'issued_at' => now()->toIso8601String(),
+        ]);
+
+        $qrCode = QrCode::format('png')
+            ->size(200)
+            ->margin(1)
+            ->generate($qrData);
+
+        // توليد PDF
+        $pdf = PDF::loadView('pdf.ticket', [
+            'participant' => $participant,
+            'qrCode' => base64_encode($qrCode),
+        ]);
+
+        return $pdf->download("ticket-{$participant->name}.pdf");
+    }
+}</code></pre>
+
+                <h4>CheckInController.php</h4>
+                <p>التحقق من البطاقات عند الدخول</p>
+                <pre><code>class CheckInController extends Controller
+{
+    public function verify(Request $request)
+    {
+        $data = json_decode($request->qr_data, true);
+
+        $participant = Participant::where('id', $data['participant_id'])
+            ->where('approval_token', $data['token'])
+            ->where('status', 'approved')
+            ->first();
+
+        if (!$participant) {
+            return response()->json([
+                'success' => false,
+                'message' => 'بطاقة غير صالحة'
+            ], 404);
+        }
+
+        if ($participant->checked_in_at) {
+            return response()->json([
+                'success' => false,
+                'message' => 'تم تسجيل الدخول مسبقاً في ' . $participant->checked_in_at->format('Y-m-d H:i')
+            ], 400);
+        }
+
+        $participant->update([
+            'checked_in_at' => now(),
+            'checked_in_by' => auth()->id(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'مرحباً ' . $participant->name,
+            'participant' => $participant
+        ]);
+    }
+}</code></pre>
+            </div>
+
+            <h3>2. Models</h3>
+            <div class="section">
+                <h4>تحديث Participant Model</h4>
+                <pre><code>class Participant extends Model
+{
+    protected $fillable = [
+        'conference_id',
+        'name',
+        'email',
+        'phone',
+        'company',
+        'job_title',
+        'type',
+        'booth_id',
+        'status',
+        'approval_token',
+        'approved_at',
+        'approved_by',
+        'checked_in_at',
+        'checked_in_by',
+        'admin_notes',
+    ];
+
+    protected $casts = [
+        'approved_at' => 'datetime',
+        'checked_in_at' => 'datetime',
+    ];
+
+    // العلاقات
+    public function conference()
+    {
+        return $this->belongsTo(Conference::class);
+    }
+
+    public function booth()
+    {
+        return $this->belongsTo(ExhibitionBooth::class, 'booth_id');
+    }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function checkedInBy()
+    {
+        return $this->belongsTo(User::class, 'checked_in_by');
+    }
+
+    // Scopes
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'approved');
+    }
+
+    public function scopeCheckedIn($query)
+    {
+        return $query->whereNotNull('checked_in_at');
+    }
+}</code></pre>
+            </div>
+
+            <h3>3. Mail Classes</h3>
+            <div class="section">
+                <h4>ParticipantApprovedMail.php</h4>
+                <pre><code>class ParticipantApprovedMail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public $participant;
+
+    public function __construct(Participant $participant)
+    {
+        $this->participant = $participant;
+    }
+
+    public function build()
+    {
+        return $this->subject('تمت الموافقة على طلب اشتراكك - ' . $this->participant->conference->title_ar)
+            ->markdown('emails.participant-approved');
+    }
+}</code></pre>
+            </div>
+
+            <h3>4. Views</h3>
+            <div class="section">
+                <h4>admin/participants/index.blade.php</h4>
+                <p>صفحة إدارة الطلبات في لوحة التحكم</p>
+
+                <h4>emails/participant-approved.blade.php</h4>
+                <p>قالب البريد الإلكتروني</p>
+
+                <h4>pdf/ticket.blade.php</h4>
+                <p>قالب بطاقة الزائر PDF</p>
+
+                <h4>checkin/scanner.blade.php</h4>
+                <p>واجهة مسح الباركود</p>
+            </div>
+
+            <h3>5. Routes</h3>
+            <div class="section">
+                <pre><code>// Frontend Routes
+Route::get('/registration/{conference}', [RegistrationController::class, 'create'])
+    ->name('registration.create');
+Route::post('/registration', [RegistrationController::class, 'store'])
+    ->name('registration.store');
+Route::get('/ticket/download/{token}', [TicketController::class, 'download'])
+    ->name('ticket.download');
+
+// Admin Routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/participants', [Admin\ParticipantController::class, 'index'])
+        ->name('admin.participants.index');
+    Route::post('/participants/{id}/approve', [Admin\ParticipantController::class, 'approve'])
+        ->name('admin.participants.approve');
+    Route::post('/participants/{id}/reject', [Admin\ParticipantController::class, 'reject'])
+        ->name('admin.participants.reject');
+});
+
+// Check-in Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkin', [CheckInController::class, 'index'])
+        ->name('checkin.index');
+    Route::post('/checkin/verify', [CheckInController::class, 'verify'])
+        ->name('checkin.verify');
+});</code></pre>
+            </div>
+
+            <!-- خطة التنفيذ -->
+            <h2>📅 خطة التنفيذ التفصيلية</h2>
+            <div class="section">
+                <h3>المرحلة 1: الإعداد والتجهيز (يوم 1)</h3>
+                <ol>
+                    <li>تثبيت المكتبات المطلوبة (QR Code, PDF)</li>
+                    <li>إنشاء migration لإضافة الحقول الجديدة</li>
+                    <li>تحديث Participant Model</li>
+                    <li>إعداد ملفات الإعداد للبريد الإلكتروني</li>
+                </ol>
+
+                <h3>المرحلة 2: Backend Development (يوم 2-3)</h3>
+                <ol>
+                    <li>إنشاء Controllers (Registration, Admin, Ticket, CheckIn)</li>
+                    <li>إنشاء Mail Classes</li>
+                    <li>إضافة Routes</li>
+                    <li>إنشاء Validation Rules</li>
+                    <li>إضافة Events & Listeners (اختياري)</li>
+                </ol>
+
+                <h3>المرحلة 3: Frontend Development (يوم 4-5)</h3>
+                <ol>
+                    <li>تحديث صفحة التسجيل (إن لزم)</li>
+                    <li>إنشاء صفحة إدارة الطلبات في لوحة التحكم</li>
+                    <li>تصميم قالب البريد الإلكتروني</li>
+                    <li>تصميم بطاقة PDF احترافية</li>
+                    <li>إنشاء واجهة مسح الباركود</li>
+                </ol>
+
+                <h3>المرحلة 4: الاختبار (يوم 6)</h3>
+                <ol>
+                    <li>اختبار تدفق التسجيل الكامل</li>
+                    <li>اختبار الموافقة والرفض</li>
+                    <li>اختبار إرسال البريد الإلكتروني</li>
+                    <li>اختبار توليد البطاقات</li>
+                    <li>اختبار مسح QR Code والتحقق</li>
+                    <li>اختبار الحالات الاستثنائية</li>
+                </ol>
+
+                <h3>المرحلة 5: النشر والتوثيق (يوم 7)</h3>
+                <ol>
+                    <li>مراجعة الكود النهائي</li>
+                    <li>كتابة التوثيق</li>
+                    <li>تدريب المستخدمين</li>
+                    <li>النشر على الخادم</li>
+                    <li>المتابعة والدعم</li>
+                </ol>
+            </div>
+
+            <!-- الاختبارات -->
+            <h2>🧪 خطة الاختبار الشاملة</h2>
+            <div class="section">
+                <h3>1. اختبارات الوحدة (Unit Tests)</h3>
+                <ul>
+                    <li>اختبار توليد <code>approval_token</code> فريد</li>
+                    <li>اختبار Validation Rules</li>
+                    <li>اختبار Model Scopes</li>
+                    <li>اختبار توليد QR Code</li>
+                </ul>
+
+                <h3>2. اختبارات التكامل (Integration Tests)</h3>
+                <ul>
+                    <li>اختبار تدفق التسجيل الكامل</li>
+                    <li>اختبار عملية الموافقة</li>
+                    <li>اختبار إرسال البريد</li>
+                    <li>اختبار توليد PDF</li>
+                    <li>اختبار التحقق من الباركود</li>
+                </ul>
+
+                <h3>3. اختبارات الأمان</h3>
+                <ul>
+                    <li>التحقق من عدم إمكانية تحميل بطاقة بدون token صحيح</li>
+                    <li>التحقق من عدم إمكانية الموافقة بدون صلاحيات</li>
+                    <li>التحقق من عدم إمكانية تزوير QR Code</li>
+                    <li>التحقق من عدم إمكانية إعادة استخدام البطاقة</li>
+                </ul>
+
+                <h3>4. اختبارات الأداء</h3>
+                <ul>
+                    <li>اختبار سرعة توليد PDF</li>
+                    <li>اختبار سرعة مسح QR Code</li>
+                    <li>اختبار التعامل مع عدد كبير من الطلبات</li>
+                </ul>
+            </div>
+
+            <!-- الأمان -->
+            <h2>🔐 اعتبارات الأمان</h2>
+            <div class="section">
+                <table>
+                    <tr>
+                        <th>المخاطر</th>
+                        <th>الحل</th>
+                    </tr>
+                    <tr>
+                        <td>تزوير البطاقات</td>
+                        <td>استخدام UUID فريد + التحقق من قاعدة البيانات</td>
+                    </tr>
+                    <tr>
+                        <td>إعادة استخدام البطاقة</td>
+                        <td>تسجيل <code>checked_in_at</code> ومنع الدخول المتكرر</td>
+                    </tr>
+                    <tr>
+                        <td>الوصول غير المصرح</td>
+                        <td>Middleware للتحقق من الصلاحيات</td>
+                    </tr>
+                    <tr>
+                        <td>تسريب البيانات</td>
+                        <td>تشفير البيانات الحساسة في QR Code</td>
+                    </tr>
+                    <tr>
+                        <td>هجمات CSRF</td>
+                        <td>استخدام CSRF tokens في جميع النماذج</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- التحسينات المستقبلية -->
+            <h2>🚀 التحسينات والميزات المستقبلية</h2>
+            <div class="section">
+                <div class="feature-grid">
+                    <div class="feature-box">
+                        <h4>📱 تطبيق جوال</h4>
+                        <p>تطوير تطبيق للهواتف الذكية لمسح البطاقات</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>📊 تقارير متقدمة</h4>
+                        <p>إحصائيات تفصيلية عن الحضور والمشاركة</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>💳 الدفع الإلكتروني</h4>
+                        <p>ربط نظام الدفع للفعاليات المدفوعة</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>🔔 الإشعارات</h4>
+                        <p>إشعارات SMS أو Push للزوار</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>🎫 بطاقات VIP</h4>
+                        <p>تصاميم مختلفة حسب نوع الزيارة</p>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>🌐 تعدد اللغات</h4>
+                        <p>دعم لغات إضافية في البطاقات</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الخلاصة -->
+            <h2>📌 الخلاصة والتوصيات</h2>
+            <div class="section">
+                <div class="alert alert-success">
+                    <h4>✅ النتائج المتوقعة</h4>
+                    <ul>
+                        <li>نظام اشتراكات متكامل وسهل الاستخدام</li>
+                        <li>تقليل العمل اليدوي في إدارة الطلبات</li>
+                        <li>بطاقات احترافية تعزز صورة المؤتمر</li>
+                        <li>عملية تحقق سريعة وآمنة عند الدخول</li>
+                        <li>إحصائيات دقيقة عن الحضور</li>
+                    </ul>
+                </div>
+
+                <h3>التوصيات</h3>
+                <ol>
+                    <li><strong>البدء بـ MVP:</strong> تنفيذ الميزات الأساسية أولاً ثم التطوير التدريجي</li>
+                    <li><strong>الاختبار المكثف:</strong> اختبار شامل قبل الإطلاق الرسمي</li>
+                    <li><strong>التوثيق:</strong> توثيق واضح لجميع الوظائف</li>
+                    <li><strong>التدريب:</strong> تدريب فريق العمل على النظام الجديد</li>
+                    <li><strong>النسخ الاحتياطي:</strong> عمل backup منتظم لقاعدة البيانات</li>
+                    <li><strong>المراقبة:</strong> مراقبة الأداء والأخطاء بعد الإطلاق</li>
+                </ol>
+
+                <h3>الجدول الزمني المقترح</h3>
+                <table>
+                    <tr>
+                        <th>المرحلة</th>
+                        <th>المدة</th>
+                        <th>الحالة</th>
+                    </tr>
+                    <tr>
+                        <td>التحليل والتخطيط</td>
+                        <td>1 يوم</td>
+                        <td><span class="badge badge-success">مكتمل</span></td>
+                    </tr>
+                    <tr>
+                        <td>الإعداد والتجهيز</td>
+                        <td>1 يوم</td>
+                        <td><span class="badge badge-warning">قيد الانتظار</span></td>
+                    </tr>
+                    <tr>
+                        <td>Backend Development</td>
+                        <td>2 يوم</td>
+                        <td><span class="badge badge-warning">قيد الانتظار</span></td>
+                    </tr>
+                    <tr>
+                        <td>Frontend Development</td>
+                        <td>2 يوم</td>
+                        <td><span class="badge badge-warning">قيد الانتظار</span></td>
+                    </tr>
+                    <tr>
+                        <td>الاختبار</td>
+                        <td>1 يوم</td>
+                        <td><span class="badge badge-warning">قيد الانتظار</span></td>
+                    </tr>
+                    <tr>
+                        <td>النشر والتوثيق</td>
+                        <td>1 يوم</td>
+                        <td><span class="badge badge-warning">قيد الانتظار</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>المجموع</strong></td>
+                        <td><strong>7-8 أيام</strong></td>
+                        <td><span class="badge badge-info">تقدير</span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- الملاحق -->
+            <h2>📎 الملاحق</h2>
+            <div class="section">
+                <h3>أ. نموذج بيانات QR Code</h3>
+                <pre><code>{
+  "v": "1.0",
+  "pid": 123,
+  "token": "550e8400-e29b-41d4-a716-446655440000",
+  "cid": 1,
+  "ccode": "CONF2025",
+  "name": "أحمد محمد علي",
+  "email": "ahmed@example.com",
+  "type": "visitor",
+  "company": "شركة التقنية",
+  "issued": "2025-11-25T10:30:00Z",
+  "checksum": "a1b2c3d4e5f6"
+}</code></pre>
+
+                <h3>ب. متغيرات البيئة المطلوبة (.env)</h3>
+                <pre><code># Mail Configuration
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-app-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@conference.com
+MAIL_FROM_NAME="مؤتمر العهد"
+
+# PDF Configuration
+PDF_FONT_DIR=storage/fonts
+PDF_DEFAULT_FONT=dejavusans
+
+# QR Code Configuration
+QR_CODE_SIZE=200
+QR_CODE_MARGIN=1</code></pre>
+
+                <h3>ج. أوامر Artisan المفيدة</h3>
+                <pre><code># إنشاء Migration
+php artisan make:migration add_approval_fields_to_participants_table
+
+# إنشاء Controller
+php artisan make:controller Admin/ParticipantController --resource
+
+# إنشاء Mail Class
+php artisan make:mail ParticipantApprovedMail --markdown=emails.participant-approved
+
+# تشغيل Migrations
+php artisan migrate
+
+# مسح الكاش
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+
+# تشغيل Queue (للبريد الإلكتروني)
+php artisan queue:work</code></pre>
+            </div>
+
+        </div>
+
+        <footer>
+            <h3>📧 معلومات الاتصال</h3>
+            <p>لأي استفسارات أو دعم فني، يرجى التواصل مع فريق التطوير</p>
+            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+                © 2025 مشروع العهد - نظام إدارة المؤتمرات والمعارض<br>
+                تم إعداد هذا التقرير بواسطة <strong>Antigravity AI Assistant</strong>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

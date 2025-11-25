@@ -37,6 +37,16 @@ Route::get('/booths', [BoothController::class, 'index'])->name('booths');
 Route::get('/booths/{booth}', [BoothController::class, 'show'])->name('booths.show');
 Route::post('/booths/{booth}/book', [BoothController::class, 'book'])->name('booths.book');
 
+// Subscription System Routes
+Route::get('/ticket/download/{token}', [\App\Http\Controllers\TicketController::class, 'download'])
+    ->name('ticket.download');
+
+// Check-in Routes (require authentication)
+Route::middleware('auth')->prefix('checkin')->name('checkin.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\CheckInController::class, 'index'])->name('index');
+    Route::post('/verify', [\App\Http\Controllers\CheckInController::class, 'verify'])->name('verify');
+});
+
 // Auth Routes
 Route::get('/dashboard', function () {
     return view('dashboard');

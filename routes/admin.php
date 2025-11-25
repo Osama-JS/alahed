@@ -52,6 +52,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Participants
     Route::resource('participants', ParticipantController::class);
+    Route::post('participants/{id}/approve', [ParticipantController::class, 'approve'])
+        ->name('participants.approve');
+    Route::post('participants/{id}/reject', [ParticipantController::class, 'reject'])
+        ->name('participants.reject');
 
     // Exhibition Booths
     Route::resource('exhibition-booths', ExhibitionBoothController::class);

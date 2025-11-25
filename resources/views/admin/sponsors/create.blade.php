@@ -11,7 +11,7 @@
     <div class="card-body">
         <form action="{{ route('admin.sponsors.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            
+
             <div class="row">
                 <!-- Conference Selection -->
                 <div class="col-md-12 mb-3">
@@ -52,11 +52,11 @@
                     <label for="type" class="form-label">نوع الرعاية <span class="text-danger">*</span></label>
                     <select name="type" id="type" class="form-control @error('type') is-invalid @enderror" required>
                         <option value="">اختر نوع الرعاية</option>
-                        <option value="platinum" {{ old('type') == 'platinum' ? 'selected' : '' }}>بلاتيني</option>
+                        <option value="platinum" {{ old('type') == 'platinum' ? 'selected' : '' }}>منظم</option>
                         <option value="gold" {{ old('type') == 'gold' ? 'selected' : '' }}>ذهبي</option>
                         <option value="silver" {{ old('type') == 'silver' ? 'selected' : '' }}>فضي</option>
                         <option value="bronze" {{ old('type') == 'bronze' ? 'selected' : '' }}>برونزي</option>
-                        <option value="partner" {{ old('type') == 'partner' ? 'selected' : '' }}>شريك</option>
+                        <option value="partner" {{ old('type') == 'partner' ? 'selected' : '' }}>شريك  استراتيجي</option>
                     </select>
                     @error('type')
                         <div class="invalid-feedback">{{ $message }}</div>

@@ -18,7 +18,7 @@
             @endif
 
         </div>
-        <img class="intro-bottom-shape" src="assets/web/images/intro-bottom-banner.svg" />
+        <img class="intro-bottom-shape" src="{{asset('assets/web/images/intro-bottom-banner.svg')}}" />
 
         <div class="container">
             <div class="intro-wrap">
@@ -84,15 +84,13 @@
                                 <div class="hero-conf-logo">
                                     <img src="{{ asset('storage/' . $conference->logo) }}" alt="Conference Logo" />
                                 </div>
-                                <span class="hero-conf-logo-label">
-                                    {{ app()->getLocale() == 'ar' ? 'شعار المؤتمر' : 'Conference Logo' }}
-                                </span>
+
                             </div>
                         @endif
                     </div>
                 </div>
                 <div class="intro-actions">
-                    <a href="ar/registration.html" class="site-filled-btn">سجل الآن</a>
+                    <a href="{{ route('registration') }}" class="site-filled-btn">سجل الآن</a>
                 </div>
             </div>
         </div>
@@ -115,8 +113,14 @@
                                 alt="{{ app()->getLocale() == 'ar' ? $conference->title_ar : $conference->title_en }}" />
                         </div>
                     @endif
+
                     <div class="about-head-content">
-                        <p>{!! app()->getLocale() == 'ar' ? $conference->description_ar : $conference->description_en !!}</p>
+                         @if($conference->logo)
+                                <div class="text-center">
+                                    <img src="{{ asset('storage/' . $conference->logo) }}" alt="Conference Logo" style="max-width: 300px"/>
+                                </div>
+                        @endif
+                        {!! app()->getLocale() == 'ar' ? $conference->description_ar : $conference->description_en !!}
                     </div>
                 </div>
             </div>
@@ -141,7 +145,7 @@
                 </div>
               </div>
         </div>
-       
+
     @endif
         </div>
     </section>
@@ -153,7 +157,7 @@
     <!-- Speakers Section -->
     @if ($speakers->count() > 0)
 
-    
+
        <section class="speakers-contain section-contain">
         <div class="container">
             <div class="section-title-wrap">
@@ -197,7 +201,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach                        
+                        @endforeach
                         </div>
 
                         <div class="speakers-pagination">
@@ -217,16 +221,16 @@
                     </div>
                 </div>
 
-               
+
 
             </div>
-             
+
         </div>
 
 
     </section>
 
-       
+
     @endif
 
  <!-- Agenda Section -->
@@ -277,8 +281,8 @@
                                             </li>
 
                                             @endforeach
-                                      
-                                           
+
+
                                             <li>
                                                 <a class="site-filled-btn white" href="{{ route('agenda.show', $day) }}">
                                                     {{ app()->getLocale() == 'ar' ? 'عرض الكل' : 'View All' }}
@@ -306,14 +310,14 @@
             </div>
         </div>
     </section>
-   
-     
+
+
     @endif
 
     <!-- Exhibitors Section -->
     @if ($exhibitors->count() > 0)
-     
-  
+
+
 
      <section id="exhibitors" class="section-contain">
         <div class="container">
@@ -330,7 +334,7 @@
                 <div class="swiper exhb-swiper" id="exhb-swiper">
                     <div class="swiper-wrapper">
                     @foreach ($exhibitors as $exhibitor)
-                   
+
                         <div class="swiper-slide">
                             <div class="news-card spe-card" style="background-color: #FFFFFFE5;">
                                 <div class="news-card-content">
@@ -344,7 +348,7 @@
                                         </a>
                                     </div>
                                     <div class="news-card-tags">
-                                        
+
                                         <div class="tag-item industry">{{ app()->getLocale() == 'ar' ? $exhibitor->summary_ar : $exhibitor->summary_en }}</div>
                                     </div>
                                     <div class="news-card-body">
@@ -406,18 +410,18 @@
                 @php
                     $sponsorTypes = $sponsors->groupBy('type');
                     $typeLabelsAr = [
-                        'platinum' => 'الرعاة البلاتينيون',
+                        'platinum' => 'المنظمون',
                         'gold' => 'الرعاة الذهبيون',
                         'silver' => 'الرعاة الفضيون',
                         'bronze' => 'الرعاة البرونزيون',
-                        'partner' => 'الشركاء',
+                        'partner' => 'الشركاء الإستراتيجيون',
                     ];
                     $typeLabelsEn = [
-                        'platinum' => 'Platinum',
+                        'platinum' => 'Regulator',
                         'gold' => 'Gold',
                         'silver' => 'Silver',
                         'bronze' => 'Bronze',
-                        'partner' => 'Partners',
+                        'partner' => 'Strategic Partners',
                     ];
                 @endphp
 
@@ -439,7 +443,7 @@
                         <div class="swiper-wrapper py-3">
                             @foreach ($sponsors as $sponsor)
                                 @if ($sponsor->logo)
-                                    <div class="swiper-slide" data-sponsor-type="{{ $sponsor->type }}">
+                                    <div class="swiper-slide" data-sponsor-type="{{ $sponsor->type }}" title="{{ app()->getLocale() == 'ar' ? $sponsor->name_ar : $sponsor->name_en }}">
                                         <div class="sponsor-logo-card">
                                             <div class="sponsor-logo-inner">
                                                 <img src="{{ asset('storage/' . $sponsor->logo) }}"
@@ -447,7 +451,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 @endif
                             @endforeach
                         </div>
@@ -527,16 +531,16 @@
         }
 
         .hero-conf-logo {
-            width: 72px;
-            height: 72px;
-            border-radius: 999px;
-            background: rgba(15, 69, 114, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+                width: 95px;
+                height: 98px;
+                border-radius: 999px;
+                background: rgb(255 255 255 / 95%);
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /* padding: 10px; */
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
         }
 
         .hero-conf-logo img {
@@ -693,7 +697,7 @@
             z-index: 5;
         }
 
-       
+
 
         /* Exhibitors slider cards: make cards consistent */
         #exhibitors .exhb-swiper .swiper-wrapper {

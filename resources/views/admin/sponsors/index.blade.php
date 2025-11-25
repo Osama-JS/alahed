@@ -5,7 +5,7 @@
     $isArabic = $locale === 'ar';
     $filters = $filters ?? [];
     $typeLabels = [
-        'platinum' => $isArabic ? 'بلاتيني' : 'Platinum',
+        'Regulator' => $isArabic ? 'منظم' : 'Platinum',
         'gold' => $isArabic ? 'ذهبي' : 'Gold',
         'silver' => $isArabic ? 'فضي' : 'Silver',
         'bronze' => $isArabic ? 'برونزي' : 'Bronze',

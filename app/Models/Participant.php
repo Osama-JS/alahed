@@ -16,6 +16,15 @@ class Participant extends Model
         'job_title',
         'type',
         'booth_id',
+        'status',
+        'approval_token',
+        'approved_at',
+        'approved_by',
+        'admin_notes',
+    ];
+
+    protected $casts = [
+        'approved_at' => 'datetime',
     ];
 
     public function conference(): BelongsTo
@@ -26,5 +35,31 @@ class Participant extends Model
     public function booth(): BelongsTo
     {
         return $this->belongsTo(ExhibitionBooth::class, 'booth_id');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(ParticipantAttendance::class);
+    }
+
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    // Query Scopes
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'approved');
+    }
+
+    public function scopeRejected($query)
+    {
+        return $query->where('status', 'rejected');
     }
 }
